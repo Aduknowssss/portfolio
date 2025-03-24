@@ -1,26 +1,225 @@
 @import "tailwindcss";
 
 :root {
+  /* Base colors - Light mode */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #ffffff;
+  --card-background: #003b5c;
+  --text-color: #ffffff;
+  --text-dark: #171717;
+  --text-light: #ffffff;
+
+  /* Prulife UK colors */
+  --primary: #0078c8;
+  --primary-light: #4da3d4;
+  --secondary: #003b5c;
+  --accent: #003b5c;
+  --muted: #002a41;
+  --light-blue: #e6f3fb;
+}
+
+.dark {
+  /* Dark mode colors */
+  --background: #001a29;
+  --foreground: #ffffff;
+  --card-background: #002a41;
+  --text-color: #ffffff;
+  --text-dark: #ffffff;
+  --accent: #001a29;
+  --muted: #002a41;
+  --light-blue: #0a3a5a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: var(--background);
+  color: var(--text-color);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Prulife UK specific styles */
+.prulife-gradient {
+  background: linear-gradient(135deg, #0078c8 0%, #005a96 100%);
+}
+
+.prulife-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  background-color: var(--card-background);
+}
+
+.prulife-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
+.theme-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    bottom: 15px;
+    right: 15px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* FAQ Accordion Styles */
+.accordion-content {
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
+
+.accordion-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.accordion-trigger:hover {
+  color: var(--primary-light);
+}
+
+.accordion-trigger[data-state="open"] .accordion-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-icon {
+  transition: transform 0.2s ease;
+}
+
+/* Chat animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease forwards;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 120, 200, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 120, 200, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 120, 200, 0);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Button hover effects */
+.btn-hover-effect {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-hover-effect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 59, 92, 0.2);
+}
+
+.btn-hover-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s ease;
+}
+
+.btn-hover-effect:hover::before {
+  left: 100%;
+}
+
+/* Nav link hover effect */
+.nav-link-hover {
+  position: relative;
+}
+
+.nav-link-hover::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-light);
+  transition: width 0.3s ease;
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
+/* Slow pulse animation for profile image */
+@keyframes pulse-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s infinite;
+}
+
