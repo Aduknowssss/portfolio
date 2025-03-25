@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge"
 import {
   Linkedin,
   Mail,
-  ExternalLink,
   Menu,
   X,
   Shield,
@@ -27,18 +26,22 @@ import {
 } from "lucide-react"
 import React, { useState, useRef, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { AnimatedSection, AnimatedElement, StaggerContainer } from "./components/animated-section"
+import { FloatingElement, FloatingBackground } from "./components/floating-elements"
 
 export default function Portfolio() {
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [message, setMessage] = useState("")
   const [chatMessages, setChatMessages] = useState([
     { sender: "agent", text: "Hi there! How can I help you with insurance today?" },
-    { sender: "user", text: "I;m interested in life insurance options." },
+    { sender: "user", text: "I'm interested in life insurance options." },
     {
       sender: "agent",
       text: "Great! I offer several life insurance plans. Would you like to schedule a consultation to discuss your needs?",
     },
   ])
+  const [activeSection, setActiveSection] = useState("")
+  const [scrolled, setScrolled] = useState(false)
 
   const chatEndRef = useRef(null)
 
@@ -58,7 +61,7 @@ export default function Portfolio() {
           ...prev,
           {
             sender: "agent",
-            text: "Thank you for your message. I;ll get back to you shortly. Would you like to schedule a consultation to discuss your insurance needs in detail?",
+            text: "Thank you for your message. I'll get back to you shortly. Would you like to schedule a consultation to discuss your insurance needs in detail?",
           },
         ])
       }, 1000)
@@ -76,9 +79,50 @@ export default function Portfolio() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [chatMessages])
 
+  // Track active section for navigation highlighting
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id)
+          }
+        })
+      },
+      { threshold: 0.5 },
+    )
+
+    const sections = document.querySelectorAll("section[id]")
+    sections.forEach((section) => observer.observe(section))
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section))
+    }
+  }, [])
+
+  // Track scroll position for header styling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true)
+      } else {
+        setScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
+
   return (
-    <div className="flex min-h-screen flex-col max-w-[1920px] mx-auto">
-      <header className="sticky top-0 z-40 w-full border-b shadow-sm" style={{ backgroundColor: "var(--secondary)" }}>
+    <div className="flex min-h-screen flex-col max-w-[1920px] mx-auto overflow-hidden">
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 w-full border-b transition-all duration-300 ${
+          scrolled ? "bg-secondary/95 backdrop-blur-sm shadow-md py-2" : "bg-secondary py-4"
+        }`}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="font-bold text-xl">
             <Link href="#home" className="flex items-center group">
@@ -88,60 +132,47 @@ export default function Portfolio() {
             </Link>
           </div>
           <nav className="hidden md:flex gap-6">
-            <Link
-              href="#about"
-              className="text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="#skills"
-              className="text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors"
-            >
-              Skills
-            </Link>
-            <Link
-              href="#products"
-              className="text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors"
-            >
-              Products
-            </Link>
-            <Link
-              href="#experience"
-              className="text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors"
-            >
-              Experience
-            </Link>
-            <Link
-              href="#faqs"
-              className="text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors"
-            >
-              FAQs
-            </Link>
-            <Link
-              href="#contact"
-              className="text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors"
-            >
-              Contact
-            </Link>
+            {["about", "skills", "products", "experience", "faqs", "contact"].map((section) => (
+              <Link
+                key={section}
+                href={`#${section}`}
+                className={`text-sm font-medium text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary-light hover:text-primary-light after:transition-all after:duration-300 hover:after:w-full transition-colors ${
+                  activeSection === section ? "text-primary-light after:w-full" : ""
+                }`}
+              >
+                {section.charAt(0).toUpperCase() + section.slice(1)}
+              </Link>
+            ))}
           </nav>
-          <MobileNav />
+          <MobileNav activeSection={activeSection} />
         </div>
       </header>
-      <main className="flex-1">
-        <section id="home" style={{ backgroundColor: "var(--secondary)" }} className="text-white py-24 sm:py-32">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-1 pt-24">
+        <AnimatedSection
+          id="home"
+          style={{ backgroundColor: "var(--secondary)" }}
+          className="text-white py-24 sm:py-32 relative overflow-hidden"
+          animation="none"
+        >
+          <FloatingBackground
+            count={15}
+            colors={["var(--primary)", "var(--primary-light)"]}
+            minOpacity={0.03}
+            maxOpacity={0.08}
+          />
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8">
-              <div className="space-y-6 md:w-1/2">
+              <AnimatedElement className="space-y-6 md:w-1/2" animation="slide-in-left">
                 <Badge style={{ backgroundColor: "var(--primary)" }} className="text-white px-3 py-1 text-sm">
                   Available for appointments
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-bold">
-                  Hi, I;m <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
+                  Hi, I'm <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
                 </h1>
-                <h2 className="text-2xl md:text-3xl font-bold text-white">PRU LIFE U.K. Agent</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white">Blue Sapphire Agent</h2>
                 <p className="text-white md:text-lg">
-                  I inspire hope, spread joy, and create new opportunities to transform people;s lives.
+                  I inspire hope, spread joy, and create new opportunities to transform people's lives.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button
@@ -166,7 +197,7 @@ export default function Portfolio() {
                     </Link>
                   </Button>
                 </div>
-                <div className="flex gap-4 pt-2">
+                <StaggerContainer className="flex gap-4 pt-2" staggerDelay={150}>
                   <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -187,9 +218,13 @@ export default function Portfolio() {
                   <Link href="mailto:rona@example.com" aria-label="Email">
                     <Mail className="h-6 w-6 text-white hover:text-primary-light transition-colors" />
                   </Link>
-                </div>
-              </div>
-              <div className="md:w-1/2 flex justify-center items-center relative">
+                </StaggerContainer>
+              </AnimatedElement>
+              <AnimatedElement
+                className="md:w-1/2 flex justify-center items-center relative"
+                animation="zoom-in"
+                delay={300}
+              >
                 {/* Updated larger image container with transparent background */}
                 <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center">
                   {/* Decorative elements */}
@@ -197,7 +232,7 @@ export default function Portfolio() {
                   <div className="absolute w-[90%] h-[90%] rounded-full border-2 border-white/20"></div>
 
                   {/* Image with extended size */}
-                  <div className="relative w-[120%] h-[120%] z-10">
+                  <div className="relative w-[120%] h-[120%] z-10 animate-float">
                     <Image
                       src="/1.jpg"
                       alt="Rona Oliveros portrait"
@@ -211,115 +246,187 @@ export default function Portfolio() {
                   </div>
 
                   {/* Floating accent elements */}
-                  <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-primary-light/20 -translate-y-1/4 translate-x-1/4 backdrop-blur-sm"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full bg-primary/20 translate-y-1/4 -translate-x-1/4 backdrop-blur-sm"></div>
+                  <FloatingElement
+                    size="lg"
+                    top="-10%"
+                    right="-10%"
+                    color="var(--primary-light)"
+                    opacity={0.2}
+                    blur={2}
+                    duration={8}
+                  />
+                  <FloatingElement
+                    size="lg"
+                    bottom="-10%"
+                    left="-10%"
+                    color="var(--primary)"
+                    opacity={0.2}
+                    blur={2}
+                    duration={10}
+                    delay={2}
+                  />
                 </div>
-              </div>
+              </AnimatedElement>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <section id="about" className="py-16 sm:py-24" style={{ backgroundColor: "var(--accent)" }}>
+        <AnimatedSection
+          id="about"
+          className="py-16 sm:py-24 relative"
+          style={{ backgroundColor: "var(--accent)" }}
+          animation="fade-in"
+        >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                About Me
-              </Badge>
-              <h2 className="text-3xl font-bold text-white">Your Trusted Financial Partner</h2>
+              <AnimatedElement animation="slide-in-left" delay={100}>
+                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+                  About Me
+                </Badge>
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={200}>
+                <h2 className="text-3xl font-bold text-white">Your Trusted Financial Partner</h2>
+              </AnimatedElement>
             </div>
             <div className="max-w-3xl mx-auto">
-              <p className="text-lg mb-4 text-white">
-                I;m a dedicated insurance professional with a passion for helping individuals and families secure their
-                financial future. With a client-centered approach, I provide personalized insurance solutions that
-                protect what matters most to you.
-              </p>
-              <p className="text-lg mb-4 text-white">
-                My journey in the insurance industry began with a simple belief: everyone deserves financial security
-                and peace of mind. As a Blue Sapphire Agent, I;m committed to understanding your unique needs and goals
-                to create tailored protection plans.
-              </p>
-              <p className="text-lg text-white">
-                I believe in building long-term relationships with my clients based on trust, transparency, and
-                exceptional service. When I;m not helping clients, you can find me volunteering in community outreach
-                programs, attending professional development seminars, and spending quality time with my family.
-              </p>
+              <StaggerContainer staggerDelay={200}>
+                <p className="text-lg mb-4 text-white">
+                  I'm a dedicated insurance professional with a passion for helping individuals and families secure
+                  their financial future. With a client-centered approach, I provide personalized insurance solutions
+                  that protect what matters most to you.
+                </p>
+                <p className="text-lg mb-4 text-white">
+                  My journey in the insurance industry began with a simple belief: everyone deserves financial security
+                  and peace of mind. As a Blue Sapphire Agent, I'm committed to understanding your unique needs and
+                  goals to create tailored protection plans.
+                </p>
+                <p className="text-lg text-white">
+                  I believe in building long-term relationships with my clients based on trust, transparency, and
+                  exceptional service. When I'm not helping clients, you can find me volunteering in community outreach
+                  programs, attending professional development seminars, and spending quality time with my family.
+                </p>
+              </StaggerContainer>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <section id="skills" style={{ backgroundColor: "var(--accent)" }} className="py-16 sm:py-24">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection
+          id="skills"
+          style={{ backgroundColor: "var(--accent)" }}
+          className="py-16 sm:py-24 relative overflow-hidden"
+          animation="fade-in"
+        >
+          <FloatingBackground
+            count={8}
+            colors={["var(--primary)", "var(--primary-light)"]}
+            minOpacity={0.03}
+            maxOpacity={0.08}
+          />
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
-              <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                My Expertise
-              </Badge>
-              <h2 className="text-3xl font-bold text-white">How I Can Help You</h2>
+              <AnimatedElement animation="slide-in-left" delay={100}>
+                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+                  My Expertise
+                </Badge>
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={200}>
+                <h2 className="text-3xl font-bold text-white">How I Can Help You</h2>
+              </AnimatedElement>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <SkillCard
-                icon={<Shield style={{ color: "var(--primary-light)" }} className="h-12 w-12" />}
-                title="Protection Planning"
-                skills={[
-                  "Life Insurance",
-                  "Critical Illness",
-                  "Income Protection",
-                  "Family Security",
-                  "Estate Planning",
-                  "Business Protection",
-                ]}
-              />
-              <SkillCard
-                icon={<TrendingUp style={{ color: "var(--primary-light)" }} className="h-12 w-12" />}
-                title="Financial Planning"
-                skills={[
-                  "Retirement Planning",
-                  "Education Funding",
-                  "Investment Strategies",
-                  "Tax Efficiency",
-                  "Wealth Accumulation",
-                  "Legacy Planning",
-                ]}
-              />
-              <SkillCard
-                icon={<Heart style={{ color: "var(--primary-light)" }} className="h-12 w-12" />}
-                title="Client Services"
-                skills={[
-                  "Needs Analysis",
-                  "Policy Reviews",
-                  "Claims Assistance",
-                  "Financial Education",
-                  "Personalized Service",
-                  "Ongoing Support",
-                ]}
-              />
+              <AnimatedElement animation="slide-in-left" delay={300}>
+                <SkillCard
+                  icon={<Shield style={{ color: "var(--primary-light)" }} className="h-12 w-12" />}
+                  title="Protection Planning"
+                  skills={[
+                    "Life Insurance",
+                    "Critical Illness",
+                    "Income Protection",
+                    "Family Security",
+                    "Estate Planning",
+                    "Business Protection",
+                  ]}
+                />
+              </AnimatedElement>
+              <AnimatedElement animation="fade-in" delay={500}>
+                <SkillCard
+                  icon={<TrendingUp style={{ color: "var(--primary-light)" }} className="h-12 w-12" />}
+                  title="Financial Planning"
+                  skills={[
+                    "Retirement Planning",
+                    "Education Funding",
+                    "Investment Strategies",
+                    "Tax Efficiency",
+                    "Wealth Accumulation",
+                    "Legacy Planning",
+                  ]}
+                />
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={700}>
+                <SkillCard
+                  icon={<Heart style={{ color: "var(--primary-light)" }} className="h-12 w-12" />}
+                  title="Client Services"
+                  skills={[
+                    "Needs Analysis",
+                    "Policy Reviews",
+                    "Claims Assistance",
+                    "Financial Education",
+                    "Personalized Service",
+                    "Ongoing Support",
+                  ]}
+                />
+              </AnimatedElement>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <section id="products" className="py-16 sm:py-24" style={{ backgroundColor: "var(--muted)" }}>
+        <AnimatedSection
+          id="products"
+          className="py-16 sm:py-24 relative"
+          style={{ backgroundColor: "var(--muted)" }}
+          animation="fade-in"
+        >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                Featured Products
-              </Badge>
-              <h2 className="text-3xl font-bold text-white">Insurance Solutions</h2>
-              <p className="mt-4 text-white max-w-2xl mx-auto">What is your current priority for today;s discussion?</p>
+              <AnimatedElement animation="slide-in-left" delay={100}>
+                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+                  Featured Products
+                </Badge>
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={200}>
+                <h2 className="text-3xl font-bold text-white">Insurance Solutions</h2>
+              </AnimatedElement>
+              <AnimatedElement animation="fade-in" delay={300}>
+                <p className="mt-4 text-white max-w-2xl mx-auto">
+                  What is your current priority for today's discussion?
+                </p>
+              </AnimatedElement>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <PriorityCard icon={<Shield className="h-10 w-10" />} title="Protection" />
-              <PriorityCard icon={<GraduationCap className="h-10 w-10" />} title="Children;s Education" />
-              <PriorityCard icon={<Armchair className="h-10 w-10" />} title="Retirement" />
-              <PriorityCard icon={<Coins className="h-10 w-10" />} title="Medium-to Long-term Goals" />
-            </div>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" staggerDelay={150}>
+              <PriorityCard icon={<Shield className="h-10 w-10 priority-card-icon" />} title="Protection" />
+              <PriorityCard
+                icon={<GraduationCap className="h-10 w-10 priority-card-icon" />}
+                title="Children's Education"
+              />
+              <PriorityCard icon={<Armchair className="h-10 w-10 priority-card-icon" />} title="Retirement" />
+              <PriorityCard
+                icon={<Coins className="h-10 w-10 priority-card-icon" />}
+                title="Medium-to Long-term Goals"
+              />
+            </StaggerContainer>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <PriorityCard icon={<Building2 className="h-10 w-10" />} title="Ready Fund for Critical Illness" />
-              <PriorityCard icon={<Home className="h-10 w-10" />} title="Estate Conservation" />
-              <PriorityCard icon={<Package className="h-10 w-10" />} title="Others" />
-            </div>
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={150}>
+              <PriorityCard
+                icon={<Building2 className="h-10 w-10 priority-card-icon" />}
+                title="Ready Fund for Critical Illness"
+              />
+              <PriorityCard icon={<Home className="h-10 w-10 priority-card-icon" />} title="Estate Conservation" />
+              <PriorityCard icon={<Package className="h-10 w-10 priority-card-icon" />} title="Others" />
+            </StaggerContainer>
 
-            <div className="text-center mt-12">
+            <AnimatedElement className="text-center mt-12" animation="fade-in" delay={800}>
               <Button
                 style={{ backgroundColor: "var(--primary)" }}
                 className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
@@ -330,60 +437,82 @@ export default function Portfolio() {
                   <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </Link>
               </Button>
-            </div>
+            </AnimatedElement>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <section id="experience" style={{ backgroundColor: "var(--muted)" }} className="py-16 sm:py-24">
+        <AnimatedSection
+          id="experience"
+          style={{ backgroundColor: "var(--muted)" }}
+          className="py-16 sm:py-24"
+          animation="fade-in"
+        >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                Professional Experience
-              </Badge>
-              <h2 className="text-3xl font-bold text-white">My Career Journey</h2>
+              <AnimatedElement animation="slide-in-left" delay={100}>
+                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+                  Professional Experience
+                </Badge>
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={200}>
+                <h2 className="text-3xl font-bold text-white">My Career Journey</h2>
+              </AnimatedElement>
             </div>
             <div className="max-w-3xl mx-auto space-y-8">
-              <ExperienceItem
-                title="Senior Insurance Agent"
-                company="Blue Sapphire"
-                period="2021 - Present"
-                description="Provide comprehensive insurance solutions to clients, consistently exceeding sales targets and maintaining a high client retention rate. Specialize in life insurance, health coverage, and retirement planning."
-              />
-              <ExperienceItem
-                title="Insurance Advisor"
-                company="Financial Protectors Inc."
-                period="2019 - 2021"
-                description="Developed personalized insurance portfolios for diverse clientele. Conducted detailed needs analyses and presented tailored solutions. Achieved recognition for outstanding client satisfaction."
-              />
-              <ExperienceItem
-                title="Financial Services Representative"
-                company="Secure Future Group"
-                period="2017 - 2019"
-                description="Assisted clients with financial planning and insurance needs. Built a strong client base through referrals and networking. Participated in continuous professional development programs."
-              />
+              <StaggerContainer staggerDelay={200}>
+                <ExperienceItem
+                  title="Senior Insurance Agent"
+                  company="Blue Sapphire"
+                  period="2021 - Present"
+                  description="Provide comprehensive insurance solutions to clients, consistently exceeding sales targets and maintaining a high client retention rate. Specialize in life insurance, health coverage, and retirement planning."
+                />
+                <ExperienceItem
+                  title="Insurance Advisor"
+                  company="Financial Protectors Inc."
+                  period="2019 - 2021"
+                  description="Developed personalized insurance portfolios for diverse clientele. Conducted detailed needs analyses and presented tailored solutions. Achieved recognition for outstanding client satisfaction."
+                />
+                <ExperienceItem
+                  title="Financial Services Representative"
+                  company="Secure Future Group"
+                  period="2017 - 2019"
+                  description="Assisted clients with financial planning and insurance needs. Built a strong client base through referrals and networking. Participated in continuous professional development programs."
+                />
+              </StaggerContainer>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* FAQ Section */}
-        <section id="faqs" className="py-16 sm:py-24" style={{ backgroundColor: "var(--accent)" }}>
+        <AnimatedSection
+          id="faqs"
+          className="py-16 sm:py-24 relative"
+          style={{ backgroundColor: "var(--accent)" }}
+          animation="fade-in"
+        >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                Common Questions
-              </Badge>
-              <h2 className="text-3xl font-bold text-white">Frequently Asked Questions</h2>
-              <p className="mt-4 text-white max-w-2xl mx-auto">
-                Find answers to the most common questions about insurance and financial planning.
-              </p>
+              <AnimatedElement animation="slide-in-left" delay={100}>
+                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+                  Common Questions
+                </Badge>
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={200}>
+                <h2 className="text-3xl font-bold text-white">Frequently Asked Questions</h2>
+              </AnimatedElement>
+              <AnimatedElement animation="fade-in" delay={300}>
+                <p className="mt-4 text-white max-w-2xl mx-auto">
+                  Find answers to the most common questions about insurance and financial planning.
+                </p>
+              </AnimatedElement>
             </div>
 
-            <div className="max-w-3xl mx-auto">
+            <AnimatedElement className="max-w-3xl mx-auto" animation="fade-in" delay={400}>
               <FAQAccordion />
-            </div>
+            </AnimatedElement>
 
-            <div className="text-center mt-12">
-              <p className="text-white mb-6">Still have questions? I;m here to help.</p>
+            <AnimatedElement className="text-center mt-12" animation="fade-in" delay={600}>
+              <p className="text-white mb-6">Still have questions? I'm here to help.</p>
               <Button
                 style={{ backgroundColor: "var(--primary)" }}
                 className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
@@ -394,21 +523,43 @@ export default function Portfolio() {
                   <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </Link>
               </Button>
-            </div>
+            </AnimatedElement>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <section id="contact" style={{ backgroundColor: "var(--primary)" }} className="py-16 sm:py-24 text-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection
+          id="contact"
+          style={{ backgroundColor: "var(--primary)" }}
+          className="py-16 sm:py-24 text-white relative overflow-hidden"
+          animation="fade-in"
+        >
+          <FloatingBackground
+            count={10}
+            colors={["var(--secondary)", "var(--primary-light)"]}
+            minOpacity={0.03}
+            maxOpacity={0.08}
+          />
+
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
-              <Badge className="bg-white text-primary mb-4">Get In Touch</Badge>
-              <h2 className="text-3xl font-bold text-white">Schedule a Free Consultation</h2>
-              <p className="mt-4 text-white max-w-2xl mx-auto">
-                Let;s discuss how I can help secure your financial future. Fill out the form below and I;ll get back to
-                you within 24 hours.
-              </p>
+              <AnimatedElement animation="slide-in-left" delay={100}>
+                <Badge className="bg-white text-primary mb-4">Get In Touch</Badge>
+              </AnimatedElement>
+              <AnimatedElement animation="slide-in-right" delay={200}>
+                <h2 className="text-3xl font-bold text-white">Schedule a Free Consultation</h2>
+              </AnimatedElement>
+              <AnimatedElement animation="fade-in" delay={300}>
+                <p className="mt-4 text-white max-w-2xl mx-auto">
+                  Let's discuss how I can help secure your financial future. Fill out the form below and I'll get back
+                  to you within 24 hours.
+                </p>
+              </AnimatedElement>
             </div>
-            <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
+            <AnimatedElement
+              className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8"
+              animation="zoom-in"
+              delay={400}
+            >
               <form className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-2">
@@ -458,9 +609,9 @@ export default function Portfolio() {
                   Schedule Consultation
                 </Button>
               </form>
-            </div>
+            </AnimatedElement>
 
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <StaggerContainer className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center" staggerDelay={200}>
               <div className="flex flex-col items-center">
                 <div className="bg-white/10 p-4 rounded-full mb-4">
                   <Phone className="h-6 w-6 text-white" />
@@ -482,112 +633,124 @@ export default function Portfolio() {
                 <h3 className="text-lg font-semibold text-white">Visit Me</h3>
                 <p className="text-white">Blue Sapphire Office, Manila</p>
               </div>
-            </div>
+            </StaggerContainer>
           </div>
-        </section>
+        </AnimatedSection>
       </main>
       <footer style={{ backgroundColor: "var(--secondary)" }} className="text-white py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="mb-4">
-                <span className="text-white text-xl font-bold">Blue Sapphire</span>
+            <AnimatedElement animation="slide-in-left" delay={100}>
+              <div>
+                <div className="mb-4">
+                  <span className="text-white text-xl font-bold">Blue Sapphire</span>
+                </div>
+                <p className="text-white mb-4">
+                  Established in 2010, Blue Sapphire is one of the leading financial services and insurance providers in
+                  the region.
+                </p>
+                <div className="flex gap-4">
+                  <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5 text-white hover:text-primary-light transition-colors"
+                    >
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                    </svg>
+                  </Link>
+                  <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <Linkedin className="h-5 w-5 text-white hover:text-primary-light transition-colors" />
+                  </Link>
+                  <Link href="mailto:rona@example.com" aria-label="Email">
+                    <Mail className="h-5 w-5 text-white hover:text-primary-light transition-colors" />
+                  </Link>
+                </div>
               </div>
-              <p className="text-white mb-4">
-                Established in 2010, Blue Sapphire is one of the leading financial services and insurance providers in
-                the region.
-              </p>
-              <div className="flex gap-4">
-                <Link href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-5 w-5 text-white hover:text-primary-light transition-colors"
-                  >
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                  </svg>
-                </Link>
-                <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <Linkedin className="h-5 w-5 text-white hover:text-primary-light transition-colors" />
-                </Link>
-                <Link href="mailto:rona@example.com" aria-label="Email">
-                  <Mail className="h-5 w-5 text-white hover:text-primary-light transition-colors" />
-                </Link>
+            </AnimatedElement>
+            <AnimatedElement animation="fade-in" delay={200}>
+              <div>
+                <h4 className="font-semibold mb-4">Products</h4>
+                <ul className="space-y-2 text-white">
+                  <li>
+                    <Link href="#" className="hover:text-primary-light transition-colors">
+                      Life Insurance
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="hover:text-primary-light transition-colors">
+                      Health Insurance
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="hover:text-primary-light transition-colors">
+                      Investment Plans
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="hover:text-primary-light transition-colors">
+                      Retirement Solutions
+                    </Link>
+                  </li>
+                </ul>
               </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Products</h4>
-              <ul className="space-y-2 text-white">
-                <li>
-                  <Link href="#" className="hover:text-primary-light transition-colors">
-                    Life Insurance
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-primary-light transition-colors">
-                    Health Insurance
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-primary-light transition-colors">
-                    Investment Plans
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="hover:text-primary-light transition-colors">
-                    Retirement Solutions
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-white">
-                <li>
-                  <Link href="#about" className="hover:text-primary-light transition-colors">
-                    About Me
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#skills" className="hover:text-primary-light transition-colors">
-                    My Expertise
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#products" className="hover:text-primary-light transition-colors">
-                    Products
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#faqs" className="hover:text-primary-light transition-colors">
-                    FAQs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#contact" className="hover:text-primary-light transition-colors">
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Office Hours</h4>
-              <ul className="space-y-2 text-white">
-                <li>Monday - Friday: 9am - 5pm</li>
-                <li>Saturday: 10am - 2pm</li>
-                <li>Sunday: Closed</li>
-                <li className="pt-2" style={{ color: "var(--primary-light)" }}>
-                  Available for appointments
-                </li>
-              </ul>
-            </div>
+            </AnimatedElement>
+            <AnimatedElement animation="fade-in" delay={300}>
+              <div>
+                <h4 className="font-semibold mb-4">Quick Links</h4>
+                <ul className="space-y-2 text-white">
+                  <li>
+                    <Link href="#about" className="hover:text-primary-light transition-colors">
+                      About Me
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#skills" className="hover:text-primary-light transition-colors">
+                      My Expertise
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#products" className="hover:text-primary-light transition-colors">
+                      Products
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#faqs" className="hover:text-primary-light transition-colors">
+                      FAQs
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#contact" className="hover:text-primary-light transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </AnimatedElement>
+            <AnimatedElement animation="slide-in-right" delay={400}>
+              <div>
+                <h4 className="font-semibold mb-4">Office Hours</h4>
+                <ul className="space-y-2 text-white">
+                  <li>Monday - Friday: 9am - 5pm</li>
+                  <li>Saturday: 10am - 2pm</li>
+                  <li>Sunday: Closed</li>
+                  <li className="pt-2" style={{ color: "var(--primary-light)" }}>
+                    Available for appointments
+                  </li>
+                </ul>
+              </div>
+            </AnimatedElement>
           </div>
-          <div className="border-t border-white/10 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+          <AnimatedElement
+            animation="fade-in"
+            delay={500}
+            className="border-t border-white/10 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left"
+          >
             <p className="text-sm text-white">
               © {new Date().getFullYear()} Rona Oliveros, Blue Sapphire Agent. All rights reserved.
             </p>
@@ -599,14 +762,14 @@ export default function Portfolio() {
                 Terms of Service
               </Link>
             </div>
-          </div>
+          </AnimatedElement>
         </div>
       </footer>
 
       {/* Enhanced Chatbot Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-lg focus:outline-none transition-all duration-300 hover:scale-110 group"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full shadow-lg focus:outline-none transition-all duration-300 hover:scale-110 group animate-bounce-slow"
         style={{
           background: "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
           boxShadow: "0 4px 20px rgba(0, 59, 92, 0.3)",
@@ -716,7 +879,7 @@ export default function Portfolio() {
   )
 }
 
-function MobileNav() {
+function MobileNav({ activeSection }) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   const toggleMenu = () => {
@@ -763,54 +926,23 @@ function MobileNav() {
         style={{ backgroundColor: "var(--secondary)" }}
       >
         <nav className="flex flex-col gap-6 items-end">
-          <Link
-            href="#about"
-            className="text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block"
-            onClick={closeMenu}
-          >
-            <span>About</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
-            href="#skills"
-            className="text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block"
-            onClick={closeMenu}
-          >
-            <span>Skills</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
-            href="#products"
-            className="text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block"
-            onClick={closeMenu}
-          >
-            <span>Products</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
-            href="#experience"
-            className="text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block"
-            onClick={closeMenu}
-          >
-            <span>Experience</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
-            href="#faqs"
-            className="text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block"
-            onClick={closeMenu}
-          >
-            <span>FAQs</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
-          </Link>
-          <Link
-            href="#contact"
-            className="text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block"
-            onClick={closeMenu}
-          >
-            <span>Contact</span>
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
-          </Link>
+          {["about", "skills", "products", "experience", "faqs", "contact"].map((section) => (
+            <Link
+              key={section}
+              href={`#${section}`}
+              className={`text-lg font-medium text-white hover:text-primary-light transition-colors relative inline-block ${
+                activeSection === section ? "text-primary-light" : ""
+              }`}
+              onClick={closeMenu}
+            >
+              <span>{section.charAt(0).toUpperCase() + section.slice(1)}</span>
+              <span
+                className={`absolute bottom-0 left-0 h-0.5 bg-primary-light transition-all duration-300 ${
+                  activeSection === section ? "w-full" : "w-0"
+                }`}
+              ></span>
+            </Link>
+          ))}
         </nav>
       </div>
     </div>
@@ -819,16 +951,19 @@ function MobileNav() {
 
 function SkillCard({ icon, title, skills }) {
   return (
-    <Card className="overflow-hidden prulife-card border-none">
+    <Card className="overflow-hidden prulife-card border-none bg-shimmer">
       <CardContent className="p-8">
         <div className="flex flex-col items-center text-center">
-          <div style={{ backgroundColor: "var(--primary)", opacity: 0.3 }} className="mb-6 p-4 rounded-full">
+          <div
+            style={{ backgroundColor: "var(--primary)", opacity: 0.3 }}
+            className="mb-6 p-4 rounded-full animate-pulse"
+          >
             {icon}
           </div>
           <h3 className="text-xl font-bold mb-4 text-white">{title}</h3>
-          <ul className="space-y-2">
+          <StaggerContainer className="space-y-2" staggerDelay={100} childClassName="flex items-center justify-center">
             {skills.map((skill, index) => (
-              <li key={index} className="flex items-center justify-center">
+              <li key={index}>
                 <Badge
                   variant="outline"
                   style={{ borderColor: "var(--primary-light)", color: "white" }}
@@ -838,55 +973,7 @@ function SkillCard({ icon, title, skills }) {
                 </Badge>
               </li>
             ))}
-          </ul>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-function ProductCard({ title, description, tags, imageUrl, detailsUrl, applyUrl }) {
-  return (
-    <Card className="overflow-hidden prulife-card border-none">
-      <div className="aspect-video relative">
-        <Image src={imageUrl || "/placeholder.svg"} alt={title} fill className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-secondary/90 to-transparent flex items-end">
-          <h3 className="text-xl font-bold p-4 text-white">{title}</h3>
-        </div>
-      </div>
-      <CardContent className="p-6">
-        <p className="text-white mb-4">{description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tags.map((tag, index) => (
-            <Badge
-              key={index}
-              variant="outline"
-              style={{ borderColor: "var(--primary-light)", color: "white" }}
-              className="bg-secondary/50"
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        <div className="flex gap-4">
-          <Button
-            size="sm"
-            variant="outline"
-            style={{ borderColor: "var(--primary-light)", color: "white" }}
-            className="hover:bg-primary/20"
-            asChild
-          >
-            <Link href={detailsUrl} target="_blank" rel="noopener noreferrer">
-              <Shield className="h-4 w-4 mr-2" />
-              Details
-            </Link>
-          </Button>
-          <Button size="sm" style={{ backgroundColor: "var(--primary)" }} className="text-white" asChild>
-            <Link href={applyUrl} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Apply Now
-            </Link>
-          </Button>
+          </StaggerContainer>
         </div>
       </CardContent>
     </Card>
@@ -951,9 +1038,9 @@ function FAQAccordion() {
           How do I file a claim with Blue Sapphire?
         </AccordionTrigger>
         <AccordionContent className="text-white/90">
-          Filing a claim is straightforward. Contact me directly or call Blue Sapphire;s claims department. I;ll guide
+          Filing a claim is straightforward. Contact me directly or call Blue Sapphire's claims department. I'll guide
           you through the process, help you gather the necessary documentation, and ensure your claim is processed as
-          quickly as possible. As your agent, I;m here to advocate for you throughout the claims process.
+          quickly as possible. As your agent, I'm here to advocate for you throughout the claims process.
         </AccordionContent>
       </AccordionItem>
 
@@ -981,7 +1068,7 @@ function FAQAccordion() {
 
       <AccordionItem value="item-7" className="border-b border-white/20">
         <AccordionTrigger className="text-white hover:text-primary-light text-left">
-          What;s the best age to buy life insurance?
+          What's the best age to buy life insurance?
         </AccordionTrigger>
         <AccordionContent className="text-white/90">
           Generally, the younger you are when you purchase life insurance, the lower your premiums will be. However, the
@@ -996,12 +1083,15 @@ function FAQAccordion() {
 
 function PriorityCard({ icon, title }) {
   return (
-    <Card className="overflow-hidden border-none hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px]">
+    <Card className="overflow-hidden border-none hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] priority-card">
       <CardContent className="p-8 flex flex-col items-center justify-center text-center h-full">
-        <div className="mb-4 p-4 rounded-full" style={{ backgroundColor: "var(--primary-light)", opacity: 0.2 }}>
-          <div className="text-primary">{icon}</div>
+        <div
+          className="mb-4 p-4 rounded-full animate-pulse"
+          style={{ backgroundColor: "var(--primary-light)", opacity: 0.2 }}
+        >
+          <div className="priority-card-icon">{icon}</div>
         </div>
-        <h3 className="text-lg font-bold text-gray-800">{title}</h3>
+        <h3 className="text-lg font-bold text-white">{title}</h3>
       </CardContent>
     </Card>
   )
