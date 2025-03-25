@@ -427,13 +427,40 @@ body {
   animation-delay: 1s;
 }
 
-/* Add this to the CSS file */
+/* Enhanced priority card styles */
 .priority-card {
   background-color: var(--secondary);
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.priority-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmer 8s linear infinite;
+  pointer-events: none;
 }
 
 .priority-card-icon {
   color: var(--primary-light);
+  filter: drop-shadow(0 0 8px rgba(77, 163, 212, 0.5));
+  transition: all 0.3s ease;
+}
+
+.priority-card:hover .priority-card-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 12px rgba(77, 163, 212, 0.7));
 }
 

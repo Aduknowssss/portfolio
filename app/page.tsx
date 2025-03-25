@@ -405,25 +405,37 @@ export default function Portfolio() {
             </div>
 
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" staggerDelay={150}>
-              <PriorityCard icon={<Shield className="h-10 w-10 priority-card-icon" />} title="Protection" />
               <PriorityCard
-                icon={<GraduationCap className="h-10 w-10 priority-card-icon" />}
+                icon={<Shield className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
+                title="Protection"
+              />
+              <PriorityCard
+                icon={<GraduationCap className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
                 title="Children's Education"
               />
-              <PriorityCard icon={<Armchair className="h-10 w-10 priority-card-icon" />} title="Retirement" />
               <PriorityCard
-                icon={<Coins className="h-10 w-10 priority-card-icon" />}
+                icon={<Armchair className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
+                title="Retirement"
+              />
+              <PriorityCard
+                icon={<Coins className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
                 title="Medium-to Long-term Goals"
               />
             </StaggerContainer>
 
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={150}>
               <PriorityCard
-                icon={<Building2 className="h-10 w-10 priority-card-icon" />}
+                icon={<Building2 className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
                 title="Ready Fund for Critical Illness"
               />
-              <PriorityCard icon={<Home className="h-10 w-10 priority-card-icon" />} title="Estate Conservation" />
-              <PriorityCard icon={<Package className="h-10 w-10 priority-card-icon" />} title="Others" />
+              <PriorityCard
+                icon={<Home className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
+                title="Estate Conservation"
+              />
+              <PriorityCard
+                icon={<Package className="h-12 w-12 priority-card-icon" strokeWidth={1.5} />}
+                title="Others"
+              />
             </StaggerContainer>
 
             <AnimatedElement className="text-center mt-12" animation="fade-in" delay={800}>
@@ -1086,12 +1098,22 @@ function PriorityCard({ icon, title }) {
     <Card className="overflow-hidden border-none hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] priority-card">
       <CardContent className="p-8 flex flex-col items-center justify-center text-center h-full">
         <div
-          className="mb-4 p-4 rounded-full animate-pulse"
-          style={{ backgroundColor: "var(--primary-light)", opacity: 0.2 }}
+          className="mb-6 p-5 rounded-full relative group"
+          style={{
+            background: "linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%)",
+            opacity: 0.8,
+          }}
         >
-          <div className="priority-card-icon">{icon}</div>
+          {/* Pulsing background effect */}
+          <div className="absolute inset-0 rounded-full bg-primary-light/30 animate-pulse-slow"></div>
+
+          {/* Icon */}
+          <div className="relative z-10">{icon}</div>
+
+          {/* Subtle glow effect */}
+          <div className="absolute -inset-1 bg-primary-light/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
-        <h3 className="text-lg font-bold text-white">{title}</h3>
+        <h3 className="text-xl font-bold text-white">{title}</h3>
       </CardContent>
     </Card>
   )
