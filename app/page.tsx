@@ -58,7 +58,7 @@ export default function Portfolio() {
           ...prev,
           {
             sender: "agent",
-            text: "Thank you for your message. I'll get back to you shortly. Would you like to schedule a consultation to discuss your insurance needs in detail?",
+            text: "Thank you for your message. I&apos;ll get back to you shortly. Would you like to schedule a consultation to discuss your insurance needs in detail?",
           },
         ])
       }, 1000)
@@ -137,11 +137,11 @@ export default function Portfolio() {
                   Available for appointments
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-bold">
-                  Hi, I'm <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
+                  Hi, I&apos;m <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
                 </h1>
-                <h2 className="text-2xl md:text-3xl font-medium text-white">PRU LIFE U.K. Agent</h2>
+                <h2 className="text-2xl md:text-3xl font-medium text-white">Blue Sapphire Agent</h2>
                 <p className="text-white md:text-lg">
-                  I inspire hope, spread joy, and create new opportunities to transform people's lives.
+                  I inspire hope, spread joy, and create new opportunities to transform people&apos;s lives.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button
@@ -229,19 +229,20 @@ export default function Portfolio() {
             </div>
             <div className="max-w-3xl mx-auto">
               <p className="text-lg mb-4 text-white">
-                I'm a dedicated insurance professional with a passion for helping individuals and families secure their
-                financial future. With a client-centered approach, I provide personalized insurance solutions that
+                I&apos;m a dedicated insurance professional with a passion for helping individuals and families secure
+                their financial future. With a client-centered approach, I provide personalized insurance solutions that
                 protect what matters most to you.
               </p>
               <p className="text-lg mb-4 text-white">
                 My journey in the insurance industry began with a simple belief: everyone deserves financial security
-                and peace of mind. As a Blue Sapphire Agent, I'm committed to understanding your unique needs and goals
-                to create tailored protection plans.
+                and peace of mind. As a Blue Sapphire Agent, I&apos;m committed to understanding your unique needs and
+                goals to create tailored protection plans.
               </p>
               <p className="text-lg text-white">
                 I believe in building long-term relationships with my clients based on trust, transparency, and
-                exceptional service. When I'm not helping clients, you can find me volunteering in community outreach
-                programs, attending professional development seminars, and spending quality time with my family.
+                exceptional service. When I&apos;m not helping clients, you can find me volunteering in community
+                outreach programs, attending professional development seminars, and spending quality time with my
+                family.
               </p>
             </div>
           </div>
@@ -303,7 +304,9 @@ export default function Portfolio() {
                 Featured Products
               </Badge>
               <h2 className="text-3xl font-bold text-white">Insurance Solutions</h2>
-              <p className="mt-4 text-white max-w-2xl mx-auto">What is your current priority for today's discussion?</p>
+              <p className="mt-4 text-white max-w-2xl mx-auto">
+                What is your current priority for today&apos;s discussion?
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -383,7 +386,7 @@ export default function Portfolio() {
             </div>
 
             <div className="text-center mt-12">
-              <p className="text-white mb-6">Still have questions? I'm here to help.</p>
+              <p className="text-white mb-6">Still have questions? I&apos;m here to help.</p>
               <Button
                 style={{ backgroundColor: "var(--primary)" }}
                 className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
@@ -404,8 +407,8 @@ export default function Portfolio() {
               <Badge className="bg-white text-primary mb-4">Get In Touch</Badge>
               <h2 className="text-3xl font-bold text-white">Schedule a Free Consultation</h2>
               <p className="mt-4 text-white max-w-2xl mx-auto">
-                Let's discuss how I can help secure your financial future. Fill out the form below and I'll get back to
-                you within 24 hours.
+                Let&apos;s discuss how I can help secure your financial future. Fill out the form below and I&apos;ll
+                get back to you within 24 hours.
               </p>
             </div>
             <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
@@ -845,6 +848,7 @@ function SkillCard({ icon, title, skills }) {
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ProductCard({ title, description, tags, imageUrl, detailsUrl, applyUrl }) {
   return (
     <Card className="overflow-hidden prulife-card border-none">
@@ -951,9 +955,9 @@ function FAQAccordion() {
           How do I file a claim with Blue Sapphire?
         </AccordionTrigger>
         <AccordionContent className="text-white/90">
-          Filing a claim is straightforward. Contact me directly or call Blue Sapphire's claims department. I'll guide
-          you through the process, help you gather the necessary documentation, and ensure your claim is processed as
-          quickly as possible. As your agent, I'm here to advocate for you throughout the claims process.
+          Filing a claim is straightforward. Contact me directly or call Blue Sapphire's claims department. I&apos;ll
+          guide you through the process, help you gather the necessary documentation, and ensure your claim is processed
+          as quickly as possible. As your agent, I&apos;m here to advocate for you throughout the claims process.
         </AccordionContent>
       </AccordionItem>
 
@@ -981,7 +985,7 @@ function FAQAccordion() {
 
       <AccordionItem value="item-7" className="border-b border-white/20">
         <AccordionTrigger className="text-white hover:text-primary-light text-left">
-          What's the best age to buy life insurance?
+          What&apos;s the best age to buy life insurance?
         </AccordionTrigger>
         <AccordionContent className="text-white/90">
           Generally, the younger you are when you purchase life insurance, the lower your premiums will be. However, the
