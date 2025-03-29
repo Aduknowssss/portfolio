@@ -14,7 +14,6 @@ import {
   Heart,
   TrendingUp,
   Phone,
-  MapPin,
   MessageCircle,
   Send,
   GraduationCap,
@@ -28,6 +27,8 @@ import React, { useState, useRef, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { AnimatedSection, AnimatedElement, StaggerContainer } from "./components/animated-section"
 import { FloatingElement, FloatingBackground } from "./components/floating-elements"
+import { ImageSlideShow } from "./components/image-slideshow"
+import { InteractiveMap } from "./components/interactive-map"
 
 export default function Portfolio() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -42,6 +43,9 @@ export default function Portfolio() {
   ])
   const [activeSection, setActiveSection] = useState("")
   const [scrolled, setScrolled] = useState(false)
+
+  // Sample profile images - in a real app, these would be actual different photos
+  const profileImages = ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg", "/5.jpg"]
 
   const chatEndRef = useRef(null)
 
@@ -161,9 +165,9 @@ export default function Portfolio() {
             maxOpacity={0.08}
           />
 
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8">
-              <AnimatedElement className="space-y-6 md:w-1/2" animation="slide-in-left">
+          <div className="container mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-8 lg:gap-12">
+              <AnimatedElement className="space-y-6 md:w-2/5 pl-4 md:pl-8" animation="slide-in-left">
                 <Badge style={{ backgroundColor: "var(--primary)" }} className="text-white px-3 py-1 text-sm">
                   Available for appointments
                 </Badge>
@@ -225,24 +229,23 @@ export default function Portfolio() {
                 animation="zoom-in"
                 delay={300}
               >
-                {/* Updated larger image container with transparent background */}
-                <div className="relative w-80 h-80 md:w-96 md:h-96 flex items-center justify-center">
+                {/* Updated image container with enhanced slideshow */}
+                <div className="relative w-[80vw] h-[80vw] md:w-[400px] md:h-[400px] lg:w-[450px] lg:h-[450px] flex items-center justify-center">
                   {/* Decorative elements */}
                   <div className="absolute w-full h-full rounded-full border-4 border-primary-light/30 animate-pulse-slow"></div>
                   <div className="absolute w-[90%] h-[90%] rounded-full border-2 border-white/20"></div>
 
-                  {/* Image with extended size */}
-                  <div className="relative w-[120%] h-[120%] z-10 animate-float">
-                    <Image
-                      src="/1.jpg"
-                      alt="Rona Oliveros portrait"
-                      fill
-                      className="object-cover rounded-full shadow-2xl border-4 border-white/30"
-                      priority
+                  {/* Enhanced image slideshow with extended size */}
+                  <div className="relative w-[110%] h-[110%] z-10">
+                    <ImageSlideShow
+                      images={profileImages}
+                      interval={4000}
+                      showControls={true}
+                      showIndicators={true}
+                      effect="kenburn"
+                      theme="glass"
+                      className="profile-slideshow"
                     />
-
-                    {/* Subtle glow effect */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-b from-primary/30 to-transparent opacity-60 mix-blend-overlay"></div>
                   </div>
 
                   {/* Floating accent elements */}
@@ -263,6 +266,36 @@ export default function Portfolio() {
                     opacity={0.2}
                     blur={2}
                     duration={10}
+                    delay={2}
+                  />
+                  <FloatingElement
+                    size="md"
+                    top="20%"
+                    right="15%"
+                    color="var(--primary-light)"
+                    opacity={0.15}
+                    blur={3}
+                    duration={12}
+                    delay={1}
+                  />
+                  <FloatingElement
+                    size="sm"
+                    bottom="20%"
+                    right="10%"
+                    color="white"
+                    opacity={0.1}
+                    blur={2}
+                    duration={7}
+                    delay={3}
+                  />
+                  <FloatingElement
+                    size="sm"
+                    top="15%"
+                    left="10%"
+                    color="white"
+                    opacity={0.1}
+                    blur={2}
+                    duration={9}
                     delay={2}
                   />
                 </div>
@@ -539,6 +572,7 @@ export default function Portfolio() {
           </div>
         </AnimatedSection>
 
+        {/* Contact Section */}
         <AnimatedSection
           id="contact"
           style={{ backgroundColor: "var(--primary)" }}
@@ -562,90 +596,153 @@ export default function Portfolio() {
               </AnimatedElement>
               <AnimatedElement animation="fade-in" delay={300}>
                 <p className="mt-4 text-white max-w-2xl mx-auto">
-                  Let's discuss how I can help secure your financial future. Fill out the form below and I'll get back
-                  to you within 24 hours.
+                  Let's discuss how I can help secure your financial future. Visit our office or fill out the form below
+                  and I'll get back to you within 24 hours.
                 </p>
               </AnimatedElement>
             </div>
-            <AnimatedElement
-              className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8"
-              animation="zoom-in"
-              delay={400}
-            >
-              <form className="space-y-4">
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium leading-none text-gray-800">
-                      Name
-                    </label>
-                    <input
-                      id="name"
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium leading-none text-gray-800">
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Your email"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="phone" className="text-sm font-medium leading-none text-gray-800">
-                      Phone
-                    </label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Your phone number"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium leading-none text-gray-800">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      className="flex min-h-[120px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="How can I help you?"
-                    />
-                  </div>
-                </div>
-                <Button style={{ backgroundColor: "var(--primary)" }} className="w-full text-white">
-                  Schedule Consultation
-                </Button>
-              </form>
-            </AnimatedElement>
 
-            <StaggerContainer className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center" staggerDelay={200}>
-              <div className="flex flex-col items-center">
-                <div className="bg-white/10 p-4 rounded-full mb-4">
-                  <Phone className="h-6 w-6 text-white" />
+            {/* Updated contact section with map on left and form on right */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Map section - left side */}
+              <AnimatedElement animation="slide-in-left" delay={400} className="h-full">
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl shadow-lg h-full">
+                  <h3 className="text-xl font-semibold mb-4 text-white">Visit Our Office</h3>
+                  <p className="mb-6 text-white">
+                    18th floor Exquadra Tower, 1 Jade Drive
+                    <br />
+                    Ortigas Center, Pasig, Metro Manila
+                  </p>
+
+                  {/* Interactive Map Component with real Google Maps */}
+                  <InteractiveMap
+                    address="18th floor Exquadra Tower, 1 Jade Drive Ortigas Center, Pasig, Metro Manila"
+                    height="400px"
+                    showControls={true}
+                  />
+
+                  {/* Contact info below map */}
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center">
+                      <div className="bg-white/10 p-3 rounded-full mr-3">
+                        <Phone className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-white">Phone</h4>
+                        <p className="text-sm text-white">+63 (123) 456-7890</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="bg-white/10 p-3 rounded-full mr-3">
+                        <Mail className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-white">Email</h4>
+                        <p className="text-sm text-white">rona@example.com</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="bg-white/10 p-3 rounded-full mr-3">
+                        <Clock className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-white">Hours</h4>
+                        <p className="text-sm text-white">Mon-Fri: 9am-5pm</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-white">Call Me</h3>
-                <p className="text-white">+63 (123) 456-7890</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="bg-white/10 p-4 rounded-full mb-4">
-                  <Mail className="h-6 w-6 text-white" />
+              </AnimatedElement>
+
+              {/* Form section - right side */}
+              <AnimatedElement animation="slide-in-right" delay={500}>
+                <div className="bg-white rounded-xl shadow-xl p-8">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-6">Schedule a Free Consultation</h3>
+                  <form className="space-y-5">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium leading-none text-gray-800">
+                        Full Name
+                      </label>
+                      <input
+                        id="name"
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label htmlFor="email" className="text-sm font-medium leading-none text-gray-800">
+                          Email
+                        </label>
+                        <input
+                          id="email"
+                          type="email"
+                          className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                          placeholder="Your email"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="phone" className="text-sm font-medium leading-none text-gray-800">
+                          Phone
+                        </label>
+                        <input
+                          id="phone"
+                          type="tel"
+                          className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                          placeholder="Your phone number"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="service" className="text-sm font-medium leading-none text-gray-800">
+                        Service Interested In
+                      </label>
+                      <select
+                        id="service"
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="">Select a service</option>
+                        <option value="life">Life Insurance</option>
+                        <option value="health">Health Insurance</option>
+                        <option value="retirement">Retirement Planning</option>
+                        <option value="education">Education Planning</option>
+                        <option value="estate">Estate Planning</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="date" className="text-sm font-medium leading-none text-gray-800">
+                        Preferred Date
+                      </label>
+                      <input
+                        id="date"
+                        type="date"
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-sm font-medium leading-none text-gray-800">
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        className="flex min-h-[120px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Tell us about your insurance needs"
+                      />
+                    </div>
+                    <Button
+                      style={{ backgroundColor: "var(--primary)" }}
+                      className="w-full text-white hover:shadow-lg transition-all duration-300"
+                    >
+                      Schedule Consultation
+                    </Button>
+                    <p className="text-xs text-gray-500 text-center mt-4">
+                      Your information is secure and will never be shared with third parties.
+                    </p>
+                  </form>
                 </div>
-                <h3 className="text-lg font-semibold text-white">Email Me</h3>
-                <p className="text-white">rona@example.com</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="bg-white/10 p-4 rounded-full mb-4">
-                  <MapPin className="h-6 w-6 text-white" />
-                </div>
-                <h3 className="text-lg font-semibold text-white">Visit Me</h3>
-                <p className="text-white">Blue Sapphire Office, Manila</p>
-              </div>
-            </StaggerContainer>
+              </AnimatedElement>
+            </div>
           </div>
         </AnimatedSection>
       </main>
@@ -1116,6 +1213,26 @@ function PriorityCard({ icon, title }) {
         <h3 className="text-xl font-bold text-white">{title}</h3>
       </CardContent>
     </Card>
+  )
+}
+
+function Clock(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
   )
 }
 
