@@ -16,41 +16,55 @@ interface AnimatedSectionProps {
   style?: React.CSSProperties
 }
 
-export function AnimatedSection({
-  children,
-  className = "",
-  animation = "fade-in",
-  delay = 0,
-  threshold = 0.1,
-  rootMargin = "0px",
-  id,
-  style,
-}: AnimatedSectionProps) {
-  const { ref, isIntersecting } = useIntersectionObserver({
-    threshold,
-    rootMargin,
-    triggerOnce: true,
-  })
+export const AnimatedSection = React.forwardRef<HTMLElement, AnimatedSectionProps>(
+  (
+    { children, className = "", animation = "fade-in", delay = 0, threshold = 0.1, rootMargin = "0px", id, style },
+    ref,
+  ) => {
+    const { ref: observerRef, isIntersecting } = useIntersectionObserver({
+      threshold,
+      rootMargin,
+      triggerOnce: true,
+    })
 
-  const getAnimationClass = () => {
-    if (animation === "none") return ""
-    return animation
-  }
+    const getAnimationClass = () => {
+      if (animation === "none") return ""
+      return animation
+    }
 
-  const animationClass = getAnimationClass()
-  const delayStyle = delay ? { transitionDelay: `${delay}ms` } : {}
+    const animationClass = getAnimationClass()
+    const delayStyle = delay ? { transitionDelay: `${delay}ms` } : {}
 
-  return (
-    <section
-      ref={ref as React.RefObject<HTMLElement>}
-      className={`${className} ${animationClass} ${isIntersecting ? "appear" : ""}`}
-      style={{ ...style, ...delayStyle }}
-      id={id}
-    >
-      {children}
-    </section>
-  )
-}
+    // Add this function to the AnimatedSection component
+    const resetAnimation = () => {
+      if (observerRef.current) {
+        observerRef.current.classList.remove("appear")
+        // Force a reflow to restart the animation
+        void observerRef.current.offsetWidth
+        observerRef.current.classList.add("appear")
+      }
+    }
+
+    // Expose the reset function
+    React.useImperativeHandle(ref, () => ({
+      resetAnimation,
+      element: observerRef.current,
+    }))
+
+    return (
+      <section
+        ref={observerRef as React.RefObject<HTMLElement>}
+        className={`${className} ${animationClass} ${isIntersecting ? "appear" : ""}`}
+        style={{ ...style, ...delayStyle }}
+        id={id}
+      >
+        {children}
+      </section>
+    )
+  },
+)
+
+AnimatedSection.displayName = "AnimatedSection"
 
 interface AnimatedElementProps {
   children: ReactNode

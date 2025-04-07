@@ -9,9 +9,9 @@
   --text-dark: #171717;
   --text-light: #ffffff;
 
-  /* Prulife UK colors */
-  --primary: #0078c8;
-  --primary-light: #4da3d4;
+  /* PRU LIFE UK colors */
+  --primary: #e61a4d;
+  --primary-light: #ff4d6d;
   --secondary: #003b5c;
   --accent: #003b5c;
   --muted: #002a41;
@@ -46,9 +46,18 @@ body {
   overflow-x: hidden;
 }
 
-/* Prulife UK specific styles */
+/* Add this to ensure the navigation bar is always visible */
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+/* PRU LIFE UK specific styles */
 .prulife-gradient {
-  background: linear-gradient(135deg, #0078c8 0%, #005a96 100%);
+  background: linear-gradient(135deg, #e61a4d 0%, #c41740 100%);
 }
 
 .prulife-card {
@@ -136,20 +145,22 @@ body {
 
 .animate-slideUp {
   animation: slideUp 0.3s ease forwards;
+  position: fixed !important;
+  z-index: 100 !important;
 }
 
 @keyframes pulse {
   0% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 120, 200, 0.7);
+    box-shadow: 0 0 0 0 rgba(230, 26, 77, 0.7);
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(0, 120, 200, 0);
+    box-shadow: 0 0 0 10px rgba(230, 26, 77, 0);
   }
   100% {
     transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 120, 200, 0);
+    box-shadow: 0 0 0 0 rgba(230, 26, 77, 0);
   }
 }
 
@@ -453,15 +464,21 @@ body {
   pointer-events: none;
 }
 
+/* Ensure text is visible in priority cards */
 .priority-card-icon {
-  color: var(--primary-light);
-  filter: drop-shadow(0 0 8px rgba(77, 163, 212, 0.5));
+  color: white !important;
+  filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.5));
   transition: all 0.3s ease;
 }
 
 .priority-card:hover .priority-card-icon {
   transform: scale(1.1);
-  filter: drop-shadow(0 0 12px rgba(77, 163, 212, 0.7));
+  filter: drop-shadow(0 0 12px rgba(255, 77, 109, 0.7));
+}
+
+.priority-card h3 {
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Enhanced Slideshow Styles */
@@ -588,7 +605,7 @@ body {
 .slide-glow {
   position: absolute;
   inset: -20px;
-  background: radial-gradient(circle at center, rgba(77, 163, 212, 0.4) 0%, transparent 70%);
+  background: radial-gradient(circle at center, rgba(255, 77, 109, 0.4) 0%, transparent 70%);
   filter: blur(20px);
   opacity: 0;
   transition: opacity 0.8s ease;
@@ -616,7 +633,7 @@ body {
   height: 10px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 10px 2px rgba(77, 163, 212, 0.8);
+  box-shadow: 0 0 10px 2px rgba(255, 77, 109, 0.8);
   animation: floatParticle 8s infinite linear;
 }
 
@@ -783,7 +800,7 @@ body {
 }
 
 .nav-btn:hover .btn-background {
-  background: rgba(0, 120, 200, 0.5);
+  background: rgba(230, 26, 77, 0.5);
   transform: scale(1.1);
 }
 
@@ -849,7 +866,7 @@ body {
 .indicator.active .indicator-inner {
   transform: scale(1);
   background: white;
-  box-shadow: 0 0 10px rgba(77, 163, 212, 0.8);
+  box-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
 }
 
 .indicator:hover:not(.active) {
@@ -1041,16 +1058,16 @@ body {
 /* Profile slideshow specific styles */
 .profile-slideshow {
   border: 5px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(77, 163, 212, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(255, 77, 109, 0.4);
   animation: subtlePulse 4s infinite alternate;
 }
 
 @keyframes subtlePulse {
   0% {
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(77, 163, 212, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(255, 77, 109, 0.4);
   }
   100% {
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 60px rgba(77, 163, 212, 0.6);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 60px rgba(255, 77, 109, 0.6);
   }
 }
 
@@ -1059,5 +1076,168 @@ body {
   background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* Section dividers */
+.section-divider {
+  height: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider-line {
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary-light);
+  border-radius: 3px;
+}
+
+/* Testimonial cards */
+.testimonial-card {
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Stats counter animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-number {
+  animation: countUp 1s ease-out forwards;
+}
+
+/* Make sure all icons in priority cards are white */
+.priority-card svg {
+  color: white !important;
+}
+
+/* Draggable element styles */
+.cursor-move {
+  cursor: move;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Make sure the chatbot is always visible */
+.fixed.bottom-6.right-6 {
+  position: fixed !important;
+  z-index: 100 !important;
+}
+
+/* Feedback section styles */
+#feedback {
+  background-color: var(--secondary);
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.feedback-form input::placeholder,
+.feedback-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+  border-color: var(--primary-light);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 77, 109, 0.3);
+}
+
+/* Appointment modal styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 90%;
+  width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Add these styles for the draggable chat button */
+
+/* Draggable chat button styles */
+#chat-button-container {
+  position: fixed;
+  z-index: 100;
+  touch-action: none;
+  user-select: none;
+}
+
+#chat-button-container:hover {
+  cursor: move;
+}
+
+#chat-button-container:active {
+  cursor: grabbing;
+}
+
+/* Make sure the chat window appears in the right position */
+.chat-window {
+  position: fixed;
+  bottom: 6rem;
+  right: 6rem;
+  z-index: 50;
+}
+
+@media (max-width: 640px) {
+  .chat-window {
+    bottom: 5rem;
+    right: 1rem;
+    width: calc(100% - 2rem) !important;
+    max-width: 350px;
+  }
 }
 
