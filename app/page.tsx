@@ -28,6 +28,7 @@ import {
   MapPin,
   Calendar,
   CheckCircle,
+  Clock,
 } from "lucide-react"
 import React, { useState, useRef, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -69,7 +70,7 @@ export default function Portfolio() {
   const [isAppointmentSubmitted, setIsAppointmentSubmitted] = useState(false)
 
   // Sample profile images - in a real app, these would be actual different photos
-  const profileImages = ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg", "/5.jpg"]
+  const profileImages = ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg"]
 
   const chatEndRef = useRef<HTMLDivElement>(null)
 
@@ -217,7 +218,7 @@ export default function Portfolio() {
   // Animate stats counters
   useEffect(() => {
     const animateStats = () => {
-      const targetStats = { clients: 500, experience: 8, satisfaction: 98, policies: 0 }
+      const targetStats = { clients: 100, experience: 6, satisfaction: 98, policies: 0 }
       const duration = 2000 // 2 seconds
       const steps = 50
       const interval = duration / steps
@@ -307,7 +308,7 @@ export default function Portfolio() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="font-bold text-xl">
             <Link href="#home" className="flex items-center group">
-            <Image src="/Blue_Sapphire.png" alt="PRU LIFE U.K." width={40} height={40} className="mr-2 rounded-md filter invert brightness-0" />
+            <Image src="/Blue Sapphire.png" alt="PRU LIFE U.K." width={40} height={40} className="mr-2 rounded-md filter invert brightness-0" />
               <span className="text-white text-xl tracking-wide transition-all duration-300 group-hover:text-primary-light">
                 Blue Sapphire
               </span>
@@ -361,7 +362,7 @@ export default function Portfolio() {
                   Hi, I&apos;m <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
                 </h1>
                 <h2 className="text-2xl md:text-3xl font-bold text-white">PRU LIFE U.K. Agent</h2>
-                <p className="text-white md:text-lg">✨Secure Your Future with Pru Life UK!!✨</p>
+                <p className="text-white md:text-lg">Secure Your Future with Pru Life UK.</p>
                 <div className="flex flex-wrap gap-4">
                   <Button
                     style={{ backgroundColor: "var(--primary)" }}
@@ -527,50 +528,74 @@ export default function Portfolio() {
           </div>
         </AnimatedSection>
 
-        {/* About Section */}
         <AnimatedSection
-          id="about"
-          ref={aboutSectionRef}
-          className="py-16 sm:py-24 relative"
-          style={{ backgroundColor: "var(--accent)" }}
-          animation="fade-in"
-        >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <AnimatedElement animation="slide-in-left" delay={100}>
-                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                  About Me
-                </Badge>
-              </AnimatedElement>
-              <AnimatedElement animation="slide-in-right" delay={200}>
-                <h2 className="text-3xl font-bold text-white">Your Trusted Financial Partner</h2>
-              </AnimatedElement>
-            </div>
-            <div className="max-w-3xl mx-auto">
-              <StaggerContainer staggerDelay={200}>
-                <p className="text-lg mb-4 text-white">
-                  Welcome to Pru Life UK! We are a proud member of Prudential PLC, a British company founded in 1848 in
-                  London, England. With over 26 million customers worldwide, we have built a legacy of trust and
-                  financial security.
+    id="about"
+    ref={aboutSectionRef}
+    className="py-16 sm:py-24 relative"
+    style={{ backgroundColor: "var(--accent)" }}
+    animation="fade-in"
+  >
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center mb-12">
+        <AnimatedElement animation="slide-in-left" delay={200}>
+          <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+            About Me
+          </Badge>
+        </AnimatedElement>
+        <AnimatedElement animation="slide-in-right" delay={200}>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white">
+            Your Journey to Financial Confidence Starts Here
+          </h2>
+        </AnimatedElement>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch md:min-h-[600px]">
+        
+        {/* Desktop Only: Full-Height Image with Animation */}
+        <AnimatedElement animation="fade-in" delay={300}>
+          <div className="hidden md:block h-full w-full">
+                  <Image
+                    src="/4.jpg" // ← Use a high-res version
+                    alt="Financial Advisor"
+                    fill
+                    quality={100} // ensures no compression
+                    className="object-cover rounded-2xl hidden lg:block"
+                  />
+          </div>
+        </AnimatedElement>
+
+        {/* Text Content */}
+        <AnimatedElement animation="slide-in-right" delay={400}>
+          <div className="flex items-center h-full">
+            <div className="space-y-6">
+              <StaggerContainer staggerDelay={250}>
+                <p className="text-lg text-white leading-relaxed">
+                  At <strong>Pru Life UK</strong>, we believe that everyone deserves a future they can look forward to—free from uncertainty and full of possibilities. With deep roots going back to 1848 as part of Prudential PLC, our legacy is built on trust, resilience, and helping people achieve lifelong financial wellness.
                 </p>
-                <p className="text-lg mb-4 text-white">
-                  In the Philippines, Pru Life UK has been serving Filipinos since 1996, pioneering Insuravest—a unique
-                  combination of insurance and investment. As the #1 Life Insurance Company in the Philippines with the
-                  largest agency force, we&apos;re committed to protecting your loved ones.
+
+                <p className="text-lg text-white leading-relaxed">
+                  Since launching in the Philippines in 1996, we’ve been more than just an insurance provider. We pioneered the <em>Insuravest</em>—a bold blend of life insurance and investment—empowering Filipinos to grow wealth while protecting what matters most. Today, we're proud to be recognized as the country's leading life insurance company, with a digitally-empowered network of trusted agents nationwide.
                 </p>
-                <p className="text-lg text-white">
-                  As a trusted partner for life, Pru Life UK has been serving Filipinos for 28 years. Our digitally
-                  empowered agency force is dedicated to helping you achieve financial security and peace of mind.
+
+                <p className="text-lg text-white leading-relaxed">
+                  But our mission goes beyond policies and numbers. We’re here to walk with you through life’s most important milestones—buying your first home, sending your children to college, planning your retirement, or simply sleeping soundly at night knowing your future is secure.
+                </p>
+
+                <p className="text-lg text-white leading-relaxed">
+                  Our approach is personal. We provide tailored financial assessments, continuous policy reviews, 24/7 claims assistance, and customer-first service. Through education and guidance, we ensure our clients understand their options and make confident financial decisions every step of the way.
+                </p>
+
+                <p className="text-lg text-white leading-relaxed">
+                  When you choose Pru Life UK, you’re choosing a lifelong partner who puts you first. Whether you're building wealth, protecting your family, or creating a legacy—our commitment remains the same: to help you live with purpose, protect your dreams, and plan for everything that’s yet to come.
                 </p>
               </StaggerContainer>
             </div>
           </div>
-        </AnimatedSection>
+        </AnimatedElement>
+      </div>
+    </div>
+  </AnimatedSection>
 
-        {/* Divider */}
-        <div className="h-16 bg-gradient-to-b from-accent to-accent/80 flex items-center justify-center">
-          <div className="w-24 h-1 bg-primary-light rounded-full"></div>
-        </div>
 
         {/* Skills Section */}
         <AnimatedSection
@@ -914,16 +939,17 @@ export default function Portfolio() {
         </div>
 
         {/* Contact Section */}
+    
         <AnimatedSection
           id="contact"
           ref={contactSectionRef}
-          className="py-16 sm:py-24 relative"
-          style={{ backgroundColor: "var(--secondary)" }}
+          style={{ backgroundColor: "var(--light-blue)" }}
+          className="py-16 sm:py-24 text-white relative overflow-hidden"
           animation="fade-in"
         >
           <FloatingBackground
-            count={8}
-            colors={["var(--primary)", "var(--primary-light)"]}
+            count={10}
+            colors={["var(--secondary)", "var(--primary-light)"]}
             minOpacity={0.03}
             maxOpacity={0.08}
           />
@@ -931,231 +957,157 @@ export default function Portfolio() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
               <AnimatedElement animation="slide-in-left" delay={100}>
-                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                  Get In Touch
-                </Badge>
+                <Badge className="bg-white text-primary mb-4">Get In Touch</Badge>
               </AnimatedElement>
               <AnimatedElement animation="slide-in-right" delay={200}>
-                <h2 className="text-3xl font-bold text-white">Contact Me</h2>
+                <h2 className="text-3xl font-bold text-white">Schedule a Free Consultation</h2>
               </AnimatedElement>
               <AnimatedElement animation="fade-in" delay={300}>
                 <p className="mt-4 text-white max-w-2xl mx-auto">
-                  Ready to secure your financial future? I&apos;m here to help you find the perfect insurance solution.
+                  Let's discuss how I can help secure your financial future. Visit our office or fill out the form below
+                  and I'll get back to you within 24 hours.
                 </p>
               </AnimatedElement>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              <AnimatedElement animation="slide-in-left" delay={400} className="space-y-8">
-                <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-6">Contact Information</h3>
+            {/* Updated contact section with map on left and form on right */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+              {/* Map section - left side */}
+              <AnimatedElement animation="slide-in-left" delay={400} className="h-full">
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl shadow-lg h-full">
+                  <h3 className="text-xl font-semibold mb-4 text-white">Visit Our Office</h3>
+                  <p className="mb-6 text-white">
+                    18th floor Exquadra Tower, 1 Jade Drive
+                    <br />
+                    Ortigas Center, Pasig, Metro Manila
+                  </p>
 
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <Phone className="h-6 w-6 text-primary-light" />
+                  {/* Interactive Map Component with real Google Maps */}
+                  <InteractiveMap
+                    address="18th floor Exquadra Tower, 1 Jade Drive Ortigas Center, Pasig, Metro Manila"
+                    height="400px"
+                    showControls={true}
+                  />
+
+                  {/* Contact info below map */}
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-center">
+                      <div className="bg-white/10 p-3 rounded-full mr-3">
+                        <Phone className="h-5 w-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-white/70 text-sm">Phone</p>
-                        <p className="text-white font-medium">09627645297</p>
+                        <h4 className="text-sm font-medium text-white">Phone</h4>
+                        <p className="text-sm text-white">+63 (123) 456-7890</p>
                       </div>
                     </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <Mail className="h-6 w-6 text-primary-light" />
+                    <div className="flex items-center">
+                      <div className="bg-white/10 p-3 rounded-full mr-3">
+                        <Mail className="h-5 w-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-white/70 text-sm">Email</p>
-                        <p className="text-white font-medium">pluk.ronaoliveros11@gmail.com</p>
+                        <h4 className="text-sm font-medium text-white">Email</h4>
+                        <p className="text-sm text-white">rona@example.com</p>
                       </div>
                     </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <MapPin className="h-6 w-6 text-primary-light" />
+                    <div className="flex items-center">
+                      <div className="bg-white/10 p-3 rounded-full mr-3">
+                        <Clock className="h-5 w-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-white/70 text-sm">Office Address</p>
-                        <p className="text-white font-medium">
-                          18F Exquadra Tower 1 Jade Drive, Ortigas Center, San Antonio Pasig City
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <Linkedin className="h-6 w-6 text-primary-light" />
-                      </div>
-                      <div>
-                        <p className="text-white/70 text-sm">LinkedIn</p>
-                        <Link
-                          href="https://www.linkedin.com/in/rona-oliveros-3923a5354"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-white font-medium hover:text-primary-light transition-colors"
-                        >
-                          linkedin.com/in/rona-oliveros-3923a5354
-                        </Link>
+                        <h4 className="text-sm font-medium text-white">Hours</h4>
+                        <p className="text-sm text-white">Mon-Fri: 9am-5pm</p>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-6">Schedule a Free Consultation</h3>
-                  <p className="text-white mb-6">
-                    I offer free consultations to discuss your insurance needs and find the best solutions for you and
-                    your family.
-                  </p>
-                  <Button
-                    style={{ backgroundColor: "var(--primary)" }}
-                    className="w-full text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
-                    onClick={() => setShowAppointmentModal(true)}
-                  >
-                    <span className="relative z-10 flex items-center justify-center">
-                      <Calendar className="mr-2 h-5 w-5" /> Schedule Now
-                    </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  </Button>
-                </div>
-
-                <div className="rounded-xl overflow-hidden h-[300px] md:h-[350px] border border-white/10">
-                  <InteractiveMap
-                    address="18th floor Exquadra Tower, 1 Jade Drive Ortigas Center, Pasig, Metro Manila"
-                    height="100%"
-                    className="w-full h-full"
-                  />
-                </div>
               </AnimatedElement>
 
-              <AnimatedElement animation="slide-in-right" delay={600}>
-                <div className="bg-white/5 backdrop-blur-sm p-8 rounded-xl border border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-6">Send Me a Message</h3>
-
-                  {isSubmitted ? (
-                    <div className="text-center py-12">
-                      <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-10 w-10 text-primary-light"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <h4 className="text-xl font-semibold text-white mb-2">Thank You!</h4>
-                      <p className="text-white/80">
-                        Your message has been sent successfully. I&apos;ll get back to you as soon as possible.
-                      </p>
+              {/* Form section - right side */}
+              <AnimatedElement animation="slide-in-right" delay={500}>
+                <div className="bg-white rounded-xl shadow-xl p-8">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-6">Schedule a Free Consultation</h3>
+                  <form className="space-y-5">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium leading-none text-gray-800">
+                        Full Name
+                      </label>
+                      <input
+                        id="name"
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Your name"
+                      />
                     </div>
-                  ) : (
-                    <form onSubmit={handleContactSubmit} className="space-y-6">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-white mb-1">
-                          Your Name
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label htmlFor="email" className="text-sm font-medium leading-none text-gray-800">
+                          Email
                         </label>
                         <input
-                          type="text"
-                          id="name"
-                          value={contactName}
-                          onChange={(e) => setContactName(e.target.value)}
-                          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                          placeholder="John Doe"
-                          required
+                          id="email"
+                          type="email"
+                          className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                          placeholder="Your email"
                         />
                       </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <label htmlFor="email" className="block text-sm font-medium text-white mb-1">
-                            Email Address
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            value={contactEmail}
-                            onChange={(e) => setContactEmail(e.target.value)}
-                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                            placeholder="you@example.com"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="phone" className="block text-sm font-medium text-white mb-1">
-                            Phone Number
-                          </label>
-                          <input
-                            type="tel"
-                            id="phone"
-                            value={contactPhone}
-                            onChange={(e) => setContactPhone(e.target.value)}
-                            className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                            placeholder="09XXXXXXXXX"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-white mb-1">
-                          Your Message
+                      <div className="space-y-2">
+                        <label htmlFor="phone" className="text-sm font-medium leading-none text-gray-800">
+                          Phone
                         </label>
-                        <textarea
-                          id="message"
-                          value={contactMessage}
-                          onChange={(e) => setContactMessage(e.target.value)}
-                          rows={5}
-                          className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                          placeholder="How can I help you today?"
-                          required
+                        <input
+                          id="phone"
+                          type="tel"
+                          className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                          placeholder="Your phone number"
                         />
                       </div>
-
-                      <div className="pt-2">
-                        <Button
-                          type="submit"
-                          disabled={isSubmitting}
-                          style={{ backgroundColor: "var(--primary)" }}
-                          className="w-full text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
-                        >
-                          {isSubmitting ? (
-                            <div className="flex items-center justify-center">
-                              <svg
-                                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                              >
-                                <circle
-                                  className="opacity-25"
-                                  cx="12"
-                                  cy="12"
-                                  r="10"
-                                  stroke="currentColor"
-                                  strokeWidth="4"
-                                ></circle>
-                                <path
-                                  className="opacity-75"
-                                  fill="currentColor"
-                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                ></path>
-                              </svg>
-                              Sending...
-                            </div>
-                          ) : (
-                            <span className="relative z-10 flex items-center justify-center">
-                              Send Message
-                              <Send className="ml-2 h-5 w-5" />
-                            </span>
-                          )}
-                          <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                        </Button>
-                      </div>
-                    </form>
-                  )}
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="service" className="text-sm font-medium leading-none text-gray-800">
+                        Service Interested In
+                      </label>
+                      <select
+                        id="service"
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="">Select a service</option>
+                        <option value="life">Life Insurance</option>
+                        <option value="health">Health Insurance</option>
+                        <option value="retirement">Retirement Planning</option>
+                        <option value="education">Education Planning</option>
+                        <option value="estate">Estate Planning</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="date" className="text-sm font-medium leading-none text-gray-800">
+                        Preferred Date
+                      </label>
+                      <input
+                        id="date"
+                        type="date"
+                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-sm font-medium leading-none text-gray-800">
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        className="flex min-h-[120px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
+                        placeholder="Tell us about your insurance needs"
+                      />
+                    </div>
+                    <Button
+                      style={{ backgroundColor: "var(--primary)" }}
+                      className="w-full text-white hover:shadow-lg transition-all duration-300"
+                    >
+                      Schedule Consultation
+                    </Button>
+                    <p className="text-xs text-gray-500 text-center mt-4">
+                      Your information is secure and will never be shared with third parties.
+                    </p>
+                  </form>
                 </div>
               </AnimatedElement>
             </div>
@@ -1318,10 +1270,11 @@ export default function Portfolio() {
           aria-label="Chat with us"
         >
           <div className="relative w-full h-full flex items-center justify-center">
-            <MessageCircle className="h-8 w-8 text-white/70 absolute transition-opacity duration-300 group-hover:opacity-0" />
-            <span className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 text-white font-medium text-xs transition-opacity duration-300">
-              Chat Now
-            </span>
+            <MessageCircle className="h-10 w-10 text-white/70 absolute transition-opacity duration-300 group-hover:opacity-0" />
+            <span className="absolute inset-0 m-auto h-fit w-fit opacity-0 group-hover:opacity-100 text-white font-medium text-xs transition-opacity duration-300">
+            Chat Now
+          </span>
+
 
             {/* Notification dot */}
             <span className="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full animate-pulse"></span>
@@ -1351,7 +1304,7 @@ export default function Portfolio() {
               </div>
               <div>
                 <h3 className="font-medium text-white">Chat with Rona</h3>
-                <p className="text-xs text-white/80">Typically replies in minutes</p>
+                <p className="text-xs text-white/80">Typically replies in less than an hour.</p>
               </div>
             </div>
             <button

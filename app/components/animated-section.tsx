@@ -9,37 +9,7 @@ import React, {
   type ReactNode,
   type ElementType,
 } from "react"
-
-// Implement the useIntersectionObserver hook directly in this file
-function useIntersectionObserver({ threshold = 0.1, rootMargin = "0px", triggerOnce = false } = {}) {
-  const ref = useRef<HTMLElement>(null)
-  const [isIntersecting, setIsIntersecting] = useState(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsIntersecting(entry.isIntersecting)
-
-        if (entry.isIntersecting && triggerOnce && ref.current) {
-          observer.unobserve(ref.current)
-        }
-      },
-      { threshold, rootMargin },
-    )
-
-    if (ref.current) {
-      observer.observe(ref.current)
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
-      }
-    }
-  }, [threshold, rootMargin, triggerOnce])
-
-  return { ref, isIntersecting }
-}
+import { useIntersectionObserver } from "../hooks/use-intersection-observer"
 
 type AnimationType = "fade-in" | "slide-in-left" | "slide-in-right" | "zoom-in" | "stagger" | "none"
 
@@ -184,15 +154,20 @@ export function StaggerContainer({
   // Clone children and add stagger classes
   const staggeredChildren = React.Children.map(children, (child, index) => {
     if (!React.isValidElement(child)) return child
-
-    return React.cloneElement(child as React.ReactElement, {
-      className: `stagger-item ${childClassName} ${isIntersecting ? "appear" : ""} ${(child as React.ReactElement).props.className || ""}`,
+  
+    const childElement = child as React.ReactElement<any>
+    const existingClassName = childElement.props.className || ""
+    const existingStyle = childElement.props.style || {}
+  
+    return React.cloneElement(childElement, {
+      className: `stagger-item ${childClassName} ${isIntersecting ? "appear" : ""} ${existingClassName}`,
       style: {
-        ...(child as React.ReactElement).props.style,
+        ...existingStyle,
         "--stagger-delay": `${index * staggerDelay}ms`,
-      },
+      } as React.CSSProperties,
     })
   })
+  
 
   return (
     <Component ref={ref as React.RefObject<HTMLElement>} className={className} style={style}>
