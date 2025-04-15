@@ -71,7 +71,7 @@ export default function Portfolio() {
   // Sample profile images - in a real app, these would be actual different photos
   const profileImages = ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg", "/5.jpg"]
 
-  const chatEndRef = useRef(null)
+  const chatEndRef = useRef<HTMLDivElement>(null)
 
   // Add refs for sections that need animation reset
   const aboutSectionRef = useRef(null)
@@ -217,7 +217,7 @@ export default function Portfolio() {
   // Animate stats counters
   useEffect(() => {
     const animateStats = () => {
-      const targetStats = { clients: 500, experience: 8, satisfaction: 98, policies: 1200 }
+      const targetStats = { clients: 500, experience: 8, satisfaction: 98, policies: 0 }
       const duration = 2000 // 2 seconds
       const steps = 50
       const interval = duration / steps
@@ -261,8 +261,8 @@ export default function Portfolio() {
     return () => observer.disconnect()
   }, [])
 
-  // Function to reset animations when navigation links are clicked
-  const resetSectionAnimation = (sectionRef) => {
+  // Fix the TypeScript errors by adding proper type annotations
+  const resetSectionAnimation = (sectionRef: React.RefObject<any>) => {
     if (sectionRef.current && sectionRef.current.resetAnimation) {
       sectionRef.current.resetAnimation()
     }
@@ -270,9 +270,9 @@ export default function Portfolio() {
 
   // Close modal when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       const modal = document.getElementById("appointment-modal")
-      if (modal && !modal.contains(event.target) && showAppointmentModal) {
+      if (modal && !modal.contains(event.target as Node) && showAppointmentModal) {
         setShowAppointmentModal(false)
       }
     }
@@ -296,116 +296,6 @@ export default function Portfolio() {
     }
   }, [showAppointmentModal])
 
-  /* Add this useEffect hook for the draggable functionality after the existing useEffect hooks */
-
-  // Make chat button draggable
-  useEffect(() => {
-    const chatButton = document.getElementById("chat-button-container")
-    if (!chatButton) return
-
-    let isDragging = false
-    let offsetX = 0
-    let offsetY = 0
-
-    const onMouseDown = (e) => {
-      isDragging = true
-
-      // Calculate the offset from the pointer to the element's top-left corner
-      const rect = chatButton.getBoundingClientRect()
-      offsetX = e.clientX - rect.left
-      offsetY = e.clientY - rect.top
-
-      // Prevent text selection during drag
-      document.body.style.userSelect = "none"
-    }
-
-    const onMouseMove = (e) => {
-      if (!isDragging) return
-
-      // Calculate new position
-      const x = e.clientX - offsetX
-      const y = e.clientY - offsetY
-
-      // Constrain to viewport
-      const maxX = window.innerWidth - chatButton.offsetWidth
-      const maxY = window.innerHeight - chatButton.offsetHeight
-
-      const constrainedX = Math.max(0, Math.min(x, maxX))
-      const constrainedY = Math.max(0, Math.min(y, maxY))
-
-      // Apply new position
-      chatButton.style.left = `${constrainedX}px`
-      chatButton.style.top = `${constrainedY}px`
-      chatButton.style.right = "auto"
-      chatButton.style.bottom = "auto"
-    }
-
-    const onMouseUp = () => {
-      isDragging = false
-      document.body.style.userSelect = ""
-    }
-
-    // Touch events for mobile
-    const onTouchStart = (e) => {
-      if (e.touches.length === 1) {
-        const touch = e.touches[0]
-        const rect = chatButton.getBoundingClientRect()
-        offsetX = touch.clientX - rect.left
-        offsetY = touch.clientY - rect.top
-        isDragging = true
-      }
-    }
-
-    const onTouchMove = (e) => {
-      if (!isDragging || e.touches.length !== 1) return
-
-      const touch = e.touches[0]
-
-      // Calculate new position
-      const x = touch.clientX - offsetX
-      const y = touch.clientY - offsetY
-
-      // Constrain to viewport
-      const maxX = window.innerWidth - chatButton.offsetWidth
-      const maxY = window.innerHeight - chatButton.offsetHeight
-
-      const constrainedX = Math.max(0, Math.min(x, maxX))
-      const constrainedY = Math.max(0, Math.min(y, maxY))
-
-      // Apply new position
-      chatButton.style.left = `${constrainedX}px`
-      chatButton.style.top = `${constrainedY}px`
-      chatButton.style.right = "auto"
-      chatButton.style.bottom = "auto"
-
-      // Prevent scrolling while dragging
-      e.preventDefault()
-    }
-
-    const onTouchEnd = () => {
-      isDragging = false
-    }
-
-    // Add event listeners
-    chatButton.addEventListener("mousedown", onMouseDown)
-    document.addEventListener("mousemove", onMouseMove)
-    document.addEventListener("mouseup", onMouseUp)
-
-    chatButton.addEventListener("touchstart", onTouchStart)
-    document.addEventListener("touchmove", onTouchMove, { passive: false })
-    document.addEventListener("touchend", onTouchEnd)
-
-    // Clean up
-    return () => {
-      chatButton.removeEventListener("mousedown", onMouseDown)
-      document.removeEventListener("mousemove", onMouseMove)
-      document.removeEventListener("mouseup", onMouseUp)
-
-      chatButton.removeEventListener("touchstart", onTouchStart)
-      document.removeEventListener("touchmove", onTouchMove)
-      document.removeEventListener("touchend", onTouchEnd)
-    }
-  }, [])
 
   return (
     <div className="flex min-h-screen flex-col max-w-[1920px] mx-auto overflow-hidden">
@@ -417,7 +307,7 @@ export default function Portfolio() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="font-bold text-xl">
             <Link href="#home" className="flex items-center group">
-              <Image src="/logo.png" alt="PRU LIFE U.K." width={40} height={40} className="mr-2 rounded-md" />
+            <Image src="/Blue_Sapphire.png" alt="PRU LIFE U.K." width={40} height={40} className="mr-2 rounded-md filter invert brightness-0" />
               <span className="text-white text-xl tracking-wide transition-all duration-300 group-hover:text-primary-light">
                 Blue Sapphire
               </span>
@@ -468,7 +358,7 @@ export default function Portfolio() {
                   Available for appointments
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-bold">
-                  Hi, I'm <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
+                  Hi, I&apos;m <span style={{ color: "var(--primary-light)" }}>Rona Oliveros</span>
                 </h1>
                 <h2 className="text-2xl md:text-3xl font-bold text-white">PRU LIFE U.K. Agent</h2>
                 <p className="text-white md:text-lg">✨Secure Your Future with Pru Life UK!!✨</p>
@@ -666,7 +556,7 @@ export default function Portfolio() {
                 <p className="text-lg mb-4 text-white">
                   In the Philippines, Pru Life UK has been serving Filipinos since 1996, pioneering Insuravest—a unique
                   combination of insurance and investment. As the #1 Life Insurance Company in the Philippines with the
-                  largest agency force, we're committed to protecting your loved ones.
+                  largest agency force, we&apos;re committed to protecting your loved ones.
                 </p>
                 <p className="text-lg text-white">
                   As a trusted partner for life, Pru Life UK has been serving Filipinos for 28 years. Our digitally
@@ -780,7 +670,7 @@ export default function Portfolio() {
               </AnimatedElement>
               <AnimatedElement animation="fade-in" delay={300}>
                 <p className="mt-4 text-white max-w-2xl mx-auto">
-                  What is your current priority for today's discussion?
+                  What is your current priority for today&apos;s discussion?
                 </p>
               </AnimatedElement>
             </div>
@@ -1003,7 +893,7 @@ export default function Portfolio() {
             </AnimatedElement>
 
             <AnimatedElement className="text-center mt-12" animation="fade-in" delay={600}>
-              <p className="text-white mb-6">Still have questions? I'm here to help.</p>
+              <p className="text-white mb-6">Still have questions? I&apos;m here to help.</p>
               <Button
                 style={{ backgroundColor: "var(--primary)" }}
                 className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
@@ -1050,7 +940,7 @@ export default function Portfolio() {
               </AnimatedElement>
               <AnimatedElement animation="fade-in" delay={300}>
                 <p className="mt-4 text-white max-w-2xl mx-auto">
-                  Ready to secure your financial future? I'm here to help you find the perfect insurance solution.
+                  Ready to secure your financial future? I&apos;m here to help you find the perfect insurance solution.
                 </p>
               </AnimatedElement>
             </div>
@@ -1158,7 +1048,7 @@ export default function Portfolio() {
                       </div>
                       <h4 className="text-xl font-semibold text-white mb-2">Thank You!</h4>
                       <p className="text-white/80">
-                        Your message has been sent successfully. I'll get back to you as soon as possible.
+                        Your message has been sent successfully. I&apos;ll get back to you as soon as possible.
                       </p>
                     </div>
                   ) : (
@@ -1417,19 +1307,13 @@ export default function Portfolio() {
         </div>
       </footer>
       {/* Draggable Chat Button */}
-      <div
-        id="chat-button-container"
-        className="fixed bottom-6 right-6 z-50 cursor-move"
-        style={{
-          touchAction: "none",
-        }}
-      >
+      <div id="chat-button-container" className="fixed bottom-6 right-6 z-50">
         <button
           onClick={toggleChat}
           className="w-16 h-16 rounded-full shadow-lg focus:outline-none transition-all duration-300 hover:scale-110 group"
           style={{
             background: "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
-            boxShadow: "0 4px 20px rgba(0, 59, 92, 0.3)",
+            boxShadow: "0 4px 20px rgba(0, 120, 200, 0.3)",
           }}
           aria-label="Chat with us"
         >
@@ -1444,15 +1328,16 @@ export default function Portfolio() {
           </div>
         </button>
       </div>
-      /* Update the chat window to position it relative to the chat button */
       {/* Enhanced Chat Window */}
       {isChatOpen && (
         <div
-          className="fixed z-50 w-80 sm:w-96 rounded-2xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 animate-slideUp chat-window"
+          className="fixed z-50 w-80 sm:w-96 rounded-t-2xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 animate-slideUp chat-window"
           style={{
             height: "500px",
             boxShadow: "0 10px 40px rgba(0, 59, 92, 0.3)",
-            transform: "translateY(-10px)",
+            bottom: 0,
+            right: "24px",
+            transform: "none",
           }}
         >
           {/* Chat Header */}
@@ -1462,7 +1347,7 @@ export default function Portfolio() {
           >
             <div className="flex items-center">
               <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3">
-                <Image src="/profile.jpg" alt="Rona Oliveros" width={40} height={40} className="rounded-full" />
+                <Image src="/1.jpg" alt="Rona Oliveros" width={50} height={50} className="rounded-full" />
               </div>
               <div>
                 <h3 className="font-medium text-white">Chat with Rona</h3>
@@ -1561,7 +1446,7 @@ export default function Portfolio() {
                   </div>
                   <h4 className="text-2xl font-semibold text-white mb-3">Appointment Scheduled!</h4>
                   <p className="text-white/90 text-lg mb-6">
-                    Thank you for scheduling a consultation. I'll be in touch shortly to confirm your appointment.
+                    Thank you for scheduling a consultation. I&apos;ll be in touch shortly to confirm your appointment.
                   </p>
                   <Button
                     onClick={() => setShowAppointmentModal(false)}
@@ -1748,7 +1633,7 @@ export default function Portfolio() {
   )
 }
 
-function MobileNav({ activeSection }) {
+function MobileNav({ activeSection }: { activeSection: string }) {
   const [isOpen, setIsOpen] = React.useState(false)
 
   const toggleMenu = () => {
@@ -1818,7 +1703,25 @@ function MobileNav({ activeSection }) {
   )
 }
 
-function SkillCard({ icon, title, skills }) {
+interface SkillCardProps {
+  icon: React.ReactNode
+  title: string
+  skills: string[]
+}
+
+interface PriorityCardProps {
+  icon: React.ReactNode
+  title: string
+}
+
+interface StatCardProps {
+  icon: React.ReactNode
+  value: number
+  label: string
+  suffix?: string
+}
+
+function SkillCard({ icon, title, skills }: SkillCardProps) {
   return (
     <Card className="overflow-hidden prulife-card border-none bg-shimmer">
       <CardContent className="p-8">
@@ -1859,7 +1762,14 @@ function SkillCard({ icon, title, skills }) {
   )
 }
 
-function ExperienceItem({ title, company, period, description }) {
+interface ExperienceItemProps {
+  title: string
+  company: string
+  period: string
+  description: string
+}
+
+function ExperienceItem({ title, company, period, description }: ExperienceItemProps) {
   return (
     <div className="mb-8 relative pl-6 border-l-2 border-primary-light">
       <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary-light"></div>
@@ -1895,7 +1805,7 @@ function FAQAccordion() {
         </AccordionTrigger>
         <AccordionContent className="text-white/90">
           Life insurance provides financial protection for your loved ones, covering expenses such as daily living
-          costs, debts, children's education, and future needs in case of your passing.
+          costs, debts, children&apos;s education, and future needs in case of your passing.
         </AccordionContent>
       </AccordionItem>
 
@@ -1947,8 +1857,8 @@ function FAQAccordion() {
         <AccordionContent className="text-white/90">
           <p>Term insurance – The policy lapses, and coverage ends.</p>
           <p>
-            Whole/Variable insurance – It may remain active if there's enough cash value to cover premiums, but if not,
-            it may lapse.
+            Whole/Variable insurance – It may remain active if there&apos;s enough cash value to cover premiums, but if
+            not, it may lapse.
           </p>
         </AccordionContent>
       </AccordionItem>
@@ -1958,8 +1868,8 @@ function FAQAccordion() {
           Is life insurance only for those with dependents?
         </AccordionTrigger>
         <AccordionContent className="text-white/90">
-          No. Even if you're single, life insurance can cover debts, funeral expenses, or serve as an investment and
-          estate-planning tool.
+          No. Even if you&apos;re single, life insurance can cover debts, funeral expenses, or serve as an investment
+          and estate-planning tool.
         </AccordionContent>
       </AccordionItem>
 
@@ -1986,7 +1896,7 @@ function FAQAccordion() {
   )
 }
 
-function PriorityCard({ icon, title }) {
+function PriorityCard({ icon, title }: PriorityCardProps) {
   return (
     <Card className="overflow-hidden border-none hover:shadow-lg transition-all duration-300 hover:translate-y-[-5px] priority-card">
       <CardContent className="p-8 flex flex-col items-center justify-center text-center h-full">
@@ -2012,7 +1922,7 @@ function PriorityCard({ icon, title }) {
   )
 }
 
-function StatCard({ icon, value, label, suffix = "" }) {
+function StatCard({ icon, value, label, suffix = "" }: StatCardProps) {
   return (
     <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl shadow-lg">
       <div className="flex flex-col items-center text-center">
@@ -2027,7 +1937,14 @@ function StatCard({ icon, value, label, suffix = "" }) {
   )
 }
 
-function TestimonialCard({ quote, name, title, rating }) {
+interface TestimonialCardProps {
+  quote: string
+  name: string
+  title: string
+  rating: number
+}
+
+function TestimonialCard({ quote, name, title, rating }: TestimonialCardProps) {
   return (
     <Card className="overflow-hidden border-none bg-white/5 backdrop-blur-sm">
       <CardContent className="p-6">
@@ -2037,7 +1954,7 @@ function TestimonialCard({ quote, name, title, rating }) {
               <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
             ))}
           </div>
-          <p className="text-white/90 italic mb-6 flex-grow">"{quote}"</p>
+          <p className="text-white/90 italic mb-6 flex-grow">&quot;{quote}&quot;</p>
           <div className="mt-auto">
             <p className="font-semibold text-white">{name}</p>
             <p className="text-sm text-white/70">{title}</p>
@@ -2047,4 +1964,3 @@ function TestimonialCard({ quote, name, title, rating }) {
     </Card>
   )
 }
-
