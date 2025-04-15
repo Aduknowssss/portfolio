@@ -38,6 +38,7 @@ import { ImageSlideShow } from "./components/image-slideshow"
 import { FeedbackForm } from "./components/feedback-form"
 import { InteractiveMap } from "./components/interactive-map"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 
 export default function Portfolio() {
   const [isChatOpen, setIsChatOpen] = useState(false)
