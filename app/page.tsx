@@ -37,6 +37,7 @@ import { FloatingElement, FloatingBackground } from "./components/floating-eleme
 import { ImageSlideShow } from "./components/image-slideshow"
 import { FeedbackForm } from "./components/feedback-form"
 import { InteractiveMap } from "./components/interactive-map"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Portfolio() {
   const [isChatOpen, setIsChatOpen] = useState(false)
