@@ -38,7 +38,11 @@ import { ImageSlideShow } from "./components/image-slideshow"
 import { FeedbackForm } from "./components/feedback-form"
 import { InteractiveMap } from "./components/interactive-map"
 
+// Remove unused:
+const [isSubmitting, setIsSubmitting] = useState(false); // ❌ Not used
+
 export default function Portfolio() {
+  
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [message, setMessage] = useState("")
   const [chatMessages, setChatMessages] = useState([
