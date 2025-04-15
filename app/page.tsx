@@ -317,7 +317,7 @@ export default function Portfolio() {
             </Link>
           </div>
           <nav className="hidden md:flex gap-6">
-            {["about", "skills", "products", "experience", "feedback", "FAQs", "contact"].map((section) => (
+            {["about", "skills", "products", "experience", "feedback", "faqs", "contact"].map((section) => (
               <Link
                 key={section}
                 href={`#${section}`}
