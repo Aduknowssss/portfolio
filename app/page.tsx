@@ -308,7 +308,6 @@ export default function Portfolio() {
           scrolled ? "bg-secondary/95 backdrop-blur-sm shadow-md py-2" : "bg-secondary py-4"
         }`}
       >
-          <Analytics />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="font-bold text-xl">
             <Link href="#home" className="flex items-center group">
