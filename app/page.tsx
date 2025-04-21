@@ -301,12 +301,14 @@ export default function Portfolio() {
 
 
   return (
+    
     <div className="flex min-h-screen flex-col max-w-[1920px] mx-auto overflow-hidden">
       <header
         className={`fixed top-0 left-0 right-0 z-50 w-full border-b transition-all duration-300 ${
           scrolled ? "bg-secondary/95 backdrop-blur-sm shadow-md py-2" : "bg-secondary py-4"
         }`}
       >
+          <Analytics />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="font-bold text-xl">
             <Link href="#home" className="flex items-center group">
