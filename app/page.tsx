@@ -39,6 +39,18 @@ import { FeedbackForm } from "./components/feedback-form"
 import { InteractiveMap } from "./components/interactive-map"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
+import Script from 'next/script';
+
+
+
+
+
+declare global {
+  interface Window {
+    botpressWebChat: any;
+  }
+}
+
 
 export default function Portfolio() {
   const [isChatOpen, setIsChatOpen] = useState(false)
@@ -83,9 +95,34 @@ export default function Portfolio() {
   const contactSectionRef = useRef(null)
   const feedbackSectionRef = useRef(null)
 
-  const toggleChat = () => {
-    setIsChatOpen(!isChatOpen)
-  }
+ const BotpressChat = () => {
+  useEffect(() => {
+    // Dynamically load Botpress WebChat script
+    const injectScript = (src, onLoadCallback) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = onLoadCallback;
+      document.body.appendChild(script);
+    };
+
+    // Load the inject.js first
+    injectScript('https://cdn.botpress.cloud/webchat/v2.4/inject.js', () => {
+      // Then load your config script
+      injectScript('https://files.bpcontent.cloud/2025/03/17/02/20250317024850-YWSCLL6Y.js', () => {
+        console.log('Botpress chat injected!');
+      });
+    });
+
+    return () => {
+      // Cleanup if needed when component unmounts
+      const scripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]');
+      scripts.forEach((script) => script.remove());
+    };
+  }, []);
+
+  return null; // No UI needed; the chat widget will appear automatically
+};
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -372,10 +409,17 @@ export default function Portfolio() {
                     className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
                     onClick={() => setShowAppointmentModal(true)}
                   >
-                    <span className="relative z-10 flex items-center">
-                      <Calendar className="mr-2 h-5 w-5" />
-                      Book Appointment
-                    </span>
+ <a
+      href="https://calendly.com/plukbluesapphire2025/booking-an-appointment"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-full hover:bg-primary-dark transition"
+    >
+      <span className="relative z-10 flex items-center">
+        <Calendar className="mr-2 h-5 w-5" />
+        Book Appointment
+      </span>
+    </a>
                     <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   </Button>
                   <Button
@@ -853,7 +897,7 @@ export default function Portfolio() {
               <AnimatedElement animation="slide-in-left" delay={100}>
                 <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white px-6 py-2 text-base">
                   Client Feedback
-                </Badge>
+                </Badge>  
               </AnimatedElement>
               <AnimatedElement animation="slide-in-right" delay={200}>
                 <h2 className="text-4xl font-bold text-white mt-4">What My Clients Say</h2>
@@ -1261,330 +1305,16 @@ export default function Portfolio() {
           </AnimatedElement>
         </div>
       </footer>
-      {/* Draggable Chat Button */}
-      <div id="chat-button-container" className="fixed bottom-6 right-6 z-50">
-        <button
-          onClick={toggleChat}
-          className="w-16 h-16 rounded-full shadow-lg focus:outline-none transition-all duration-300 hover:scale-110 group"
-          style={{
-            background: "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
-            boxShadow: "0 4px 20px rgba(0, 120, 200, 0.3)",
-          }}
-          aria-label="Chat with us"
-        >
-          <div className="relative w-full h-full flex items-center justify-center">
-            <MessageCircle className="h-10 w-10 text-white/70 absolute transition-opacity duration-300 group-hover:opacity-0" />
-            <span className="absolute inset-0 m-auto h-fit w-fit opacity-0 group-hover:opacity-100 text-white font-medium text-xs transition-opacity duration-300">
-            Chat Now
-          </span>
+      
+        {/* Botpress Scripts */}
 
+        <script src="https://cdn.botpress.cloud/webchat/v2.4/inject.js"></script>
+        <script src="https://files.bpcontent.cloud/2025/03/17/02/20250317024850-YWSCLL6Y.js"></script>
 
-            {/* Notification dot */}
-            <span className="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full animate-pulse"></span>
-          </div>
-        </button>
-      </div>
-      {/* Enhanced Chat Window */}
-      {isChatOpen && (
-        <div
-          className="fixed z-50 w-80 sm:w-96 rounded-t-2xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 animate-slideUp chat-window"
-          style={{
-            height: "500px",
-            boxShadow: "0 10px 40px rgba(0, 59, 92, 0.3)",
-            bottom: 0,
-            right: "24px",
-            transform: "none",
-          }}
-        >
-          {/* Chat Header */}
-          <div
-            className="p-4 flex justify-between items-center"
-            style={{ background: "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)" }}
-          >
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3">
-                <Image src="/1.jpg" alt="Rona Oliveros" width={50} height={50} className="rounded-full" />
-              </div>
-              <div>
-                <h3 className="font-medium text-white">Chat with Rona</h3>
-                <p className="text-xs text-white/80">Typically replies in less than an hour.</p>
-              </div>
-            </div>
-            <button
-              onClick={toggleChat}
-              className="text-white/80 hover:text-white transition-colors"
-              aria-label="Close chat"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          {/* Chat Messages */}
-          <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
-            <div className="space-y-4">
-              {chatMessages.map((msg, index) => (
-                <div key={index} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[80%] p-3 rounded-2xl ${
-                      msg.sender === "user" ? "bg-gray-200 text-gray-800" : "text-white"
-                    }`}
-                    style={
-                      msg.sender === "agent"
-                        ? {
-                            background: "linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)",
-                          }
-                        : {}
-                    }
-                  >
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
-              <div ref={chatEndRef} />
-            </div>
-          </div>
-
-          {/* Chat Input */}
-          <div className="p-3 border-t border-gray-200 bg-white">
-            <div className="flex items-center rounded-full border border-gray-300 overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
-              <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="flex-1 px-4 py-2 focus:outline-none text-gray-700"
-              />
-              <button
-                onClick={handleSendMessage}
-                className="p-2 text-white flex items-center justify-center"
-                style={{
-                  backgroundColor: "var(--primary)",
-                }}
-                aria-label="Send message"
-              >
-                <Send className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Chat Footer */}
-          <div className="p-2 text-center text-xs text-gray-500 bg-gray-50 border-t border-gray-200">
-            Powered by PRU LIFE U.K. • Your data is secure
-          </div>
-        </div>
-      )}
-      {/* Appointment Modal */}
-      {showAppointmentModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div
-            id="appointment-modal"
-            className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            style={{
-              background: "linear-gradient(to bottom, var(--secondary) 0%, var(--accent) 100%)",
-            }}
-          >
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-white">Schedule an Appointment</h3>
-                <button
-                  onClick={() => setShowAppointmentModal(false)}
-                  className="text-white/80 hover:text-white transition-colors"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-
-              {isAppointmentSubmitted ? (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle className="h-12 w-12 text-primary-light" />
-                  </div>
-                  <h4 className="text-2xl font-semibold text-white mb-3">Appointment Scheduled!</h4>
-                  <p className="text-white/90 text-lg mb-6">
-                    Thank you for scheduling a consultation. I&apos;ll be in touch shortly to confirm your appointment.
-                  </p>
-                  <Button
-                    onClick={() => setShowAppointmentModal(false)}
-                    style={{ backgroundColor: "var(--primary)" }}
-                    className="text-white px-8 py-2"
-                  >
-                    Close
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={handleAppointmentSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="appointment-name" className="block text-sm font-medium text-white mb-1">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        id="appointment-name"
-                        value={appointmentName}
-                        onChange={(e) => setAppointmentName(e.target.value)}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                        placeholder="John Doe"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="appointment-email" className="block text-sm font-medium text-white mb-1">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="appointment-email"
-                        value={appointmentEmail}
-                        onChange={(e) => setAppointmentEmail(e.target.value)}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                        placeholder="you@example.com"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="appointment-phone" className="block text-sm font-medium text-white mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="appointment-phone"
-                      value={appointmentPhone}
-                      onChange={(e) => setAppointmentPhone(e.target.value)}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                      placeholder="09XXXXXXXXX"
-                      required
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="appointment-date" className="block text-sm font-medium text-white mb-1">
-                        Preferred Date
-                      </label>
-                      <input
-                        type="date"
-                        id="appointment-date"
-                        value={appointmentDate}
-                        onChange={(e) => setAppointmentDate(e.target.value)}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                        min={new Date().toISOString().split("T")[0]}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="appointment-time" className="block text-sm font-medium text-white mb-1">
-                        Preferred Time
-                      </label>
-                      <input
-                        type="time"
-                        id="appointment-time"
-                        value={appointmentTime}
-                        onChange={(e) => setAppointmentTime(e.target.value)}
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-white mb-1">Appointment Type</label>
-                    <div className="flex gap-4 mt-2">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="appointment-type"
-                          value="virtual"
-                          checked={appointmentType === "virtual"}
-                          onChange={() => setAppointmentType("virtual")}
-                          className="h-4 w-4 text-primary"
-                        />
-                        <span className="text-white">Virtual Meeting</span>
-                      </label>
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="appointment-type"
-                          value="in-person"
-                          checked={appointmentType === "in-person"}
-                          onChange={() => setAppointmentType("in-person")}
-                          className="h-4 w-4 text-primary"
-                        />
-                        <span className="text-white">In-Person Meeting</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="appointment-notes" className="block text-sm font-medium text-white mb-1">
-                      Additional Notes (Optional)
-                    </label>
-                    <textarea
-                      id="appointment-notes"
-                      value={appointmentNotes}
-                      onChange={(e) => setAppointmentNotes(e.target.value)}
-                      rows={3}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-light"
-                      placeholder="Let me know if you have any specific topics you'd like to discuss"
-                    />
-                  </div>
-
-                  <div className="flex justify-end gap-4 pt-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowAppointmentModal(false)}
-                      className="border-white text-white hover:bg-white/10"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isAppointmentSubmitting}
-                      style={{ backgroundColor: "var(--primary)" }}
-                      className="text-white relative overflow-hidden group"
-                    >
-                      {isAppointmentSubmitting ? (
-                        <div className="flex items-center">
-                          <svg
-                            className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                          Processing...
-                        </div>
-                      ) : (
-                        <span className="flex items-center">
-                          <Calendar className="mr-2 h-4 w-4" />
-                          Schedule Appointment
-                        </span>
-                      )}
-                    </Button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <div>
+      {/* Your app content */}
+      <BotpressChat /> {/* This will inject Botpress */}
+    </div>
     </div>
   )
 }

@@ -122,6 +122,8 @@ body {
   transition: transform 0.2s ease;
 }
 
+
+
 /* Chat animations */
 @keyframes slideUp {
   from {
