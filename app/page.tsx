@@ -95,32 +95,34 @@ export default function Portfolio() {
   const contactSectionRef = useRef(null)
   const feedbackSectionRef = useRef(null)
 
- const BotpressChat = () => {
-  useEffect(() => {
-    // Dynamically load Botpress WebChat script
-    const injectScript = (src, onLoadCallback) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      script.onload = onLoadCallback;
-      document.body.appendChild(script);
-    };
-
-    // Load the inject.js first
-    injectScript('https://cdn.botpress.cloud/webchat/v2.4/inject.js', () => {
-      // Then load your config script
-      injectScript('https://files.bpcontent.cloud/2025/03/17/02/20250317024850-YWSCLL6Y.js', () => {
-        console.log('Botpress chat injected!');
+  const BotpressChat = () => {
+    useEffect(() => {
+      // Function to dynamically inject a script
+      const injectScript = (src: string, onLoadCallback: () => void) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = onLoadCallback;
+        document.body.appendChild(script);
+      };
+  
+      // Load the Botpress WebChat scripts
+      injectScript('https://cdn.botpress.cloud/webchat/v2.4/inject.js', () => {
+        injectScript('https://files.bpcontent.cloud/2025/03/17/02/20250317024850-YWSCLL6Y.js', () => {
+          console.log('Botpress chat injected!');
+        });
       });
-    });
-
-    return () => {
-      // Cleanup if needed when component unmounts
-      const scripts = document.querySelectorAll('script[src*="botpress"], script[src*="bpcontent"]');
-      scripts.forEach((script) => script.remove());
-    };
-  }, []);
-
+  
+      return () => {
+        // Clean up Botpress scripts on unmount
+        const scripts = document.querySelectorAll<HTMLScriptElement>(
+          'script[src*="botpress"], script[src*="bpcontent"]'
+        );
+        scripts.forEach((script) => script.remove());
+      };
+    }, []);
+  
+ 
   return null; // No UI needed; the chat widget will appear automatically
 };
 
