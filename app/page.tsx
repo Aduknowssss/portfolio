@@ -406,24 +406,24 @@ export default function Portfolio() {
                 <h2 className="text-2xl md:text-3xl font-bold text-white">PRU LIFE U.K. Agent</h2>
                 <p className="text-white md:text-lg">Secure Your Future with Pru Life UK.</p>
                 <div className="flex flex-wrap gap-4">
-                  <Button
+
+
+                <a
+                    href="https://calendly.com/plukbluesapphire2025/booking-an-appointment"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-4 py-2 text-sm text-white rounded-md hover:bg-primary-dark transition-all duration-300 relative overflow-hidden group hover:shadow-lg hover:translate-y-[-2px]"
                     style={{ backgroundColor: "var(--primary)" }}
-                    className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
-                    onClick={() => setShowAppointmentModal(true)}
                   >
- <a
-      href="https://calendly.com/plukbluesapphire2025/booking-an-appointment"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-full hover:bg-primary-dark transition"
-    >
-      <span className="relative z-10 flex items-center">
-        <Calendar className="mr-2 h-5 w-5" />
-        Book Appointment
-      </span>
-    </a>
+                    <span className="relative z-10 flex items-center font-medium">
+                      <Calendar className="mr-2 h-5 w-5" />
+                      Book Appointment
+                    </span>
                     <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  </Button>
+                  </a>
+
+
+
                   <Button
                     variant="outline"
                     className="border-white text-white bg-white/10 hover:bg-white/20 relative overflow-hidden group transition-all duration-300 hover:border-primary-light"
@@ -775,18 +775,21 @@ export default function Portfolio() {
             </StaggerContainer>
 
             <AnimatedElement className="text-center mt-12" animation="fade-in" delay={800}>
-              <Button
+              <a
+                href="https://calendly.com/plukbluesapphire2025/booking-an-appointment"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full hover:bg-primary-dark transition relative overflow-hidden group shadow-md hover:shadow-lg hover:translate-y-[-2px]"
                 style={{ backgroundColor: "var(--primary)" }}
-                className="text-white relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px]"
-                onClick={() => setShowAppointmentModal(true)}
               >
                 <span className="relative z-10 flex items-center">
                   <Calendar className="mr-2 h-5 w-5" />
-                  Schedule a Consultation
+                  Book Appointment
                 </span>
                 <span className="absolute inset-0 bg-gradient-to-r from-primary-light to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-              </Button>
+              </a>
             </AnimatedElement>
+
           </div>
         </AnimatedSection>
 
@@ -1120,11 +1123,8 @@ export default function Portfolio() {
                       >
                         <option value="">Select a service</option>
                         <option value="life">Life Insurance</option>
-                        <option value="health">Health Insurance</option>
-                        <option value="retirement">Retirement Planning</option>
-                        <option value="education">Education Planning</option>
-                        <option value="estate">Estate Planning</option>
-                        <option value="other">Other</option>
+                        <option value="parttime">Part-Time Job</option>
+                        
                       </select>
                     </div>
                     <div className="space-y-2">
