@@ -29,6 +29,7 @@ import {
   Calendar,
   CheckCircle,
   Clock,
+  Wallet,
 } from "lucide-react"
 import React, { useState, useRef, useEffect } from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -37,8 +38,19 @@ import { FloatingElement, FloatingBackground } from "./components/floating-eleme
 import { ImageSlideShow } from "./components/image-slideshow"
 import { FeedbackForm } from "./components/feedback-form"
 import { InteractiveMap } from "./components/interactive-map"
+import { CalendlyWidget } from "./components/calendly-widgets"
 
 
+
+
+
+
+interface Testimonial {
+  name: string;
+  title: string;
+  feedback: string;
+  rating: number;
+}
 
 
 
@@ -90,7 +102,38 @@ export default function Portfolio() {
   const skillsSectionRef = useRef(null)
   const productsSectionRef = useRef(null)
   const contactSectionRef = useRef(null)
-  const feedbackSectionRef = useRef(null)
+  const feedbackSectionRef = useRef<HTMLDivElement>(null);
+
+
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([
+    {
+      name: "Maria Santos",
+      title: "Business Owner",
+      feedback:
+        "Rona helped me secure my family's future with a comprehensive life insurance plan. Her expertise and dedication are unmatched!",
+      rating: 5,
+    },
+    {
+      name: "Juan Dela Cruz",
+      title: "School Teacher",
+      feedback:
+        "I was overwhelmed by insurance options until I met Rona. She simplified everything and found the perfect plan for my retirement needs.",
+      rating: 5,
+    },
+    {
+      name: "Anna Reyes",
+      title: "Healthcare Professional",
+      feedback:
+        "Professional, knowledgeable, and genuinely cares about her clients. Rona has been managing my family's insurance needs for years.",
+      rating: 4,
+    },
+  ]);
+
+  const handleAddTestimonial = (testimonial: Testimonial) => {
+    setTestimonials((prev) => [testimonial, ...prev]);
+  };
+
+
 
   const BotpressChat = () => {
     useEffect(() => {
@@ -256,7 +299,7 @@ export default function Portfolio() {
   // Animate stats counters
   useEffect(() => {
     const animateStats = () => {
-      const targetStats = { clients: 100, experience: 6, satisfaction: 98, policies: 0 }
+      const targetStats = { clients: 100, experience: 5, satisfaction: 98, policies: 0 }
       const duration = 2000 // 2 seconds
       const steps = 50
       const interval = duration / steps
@@ -538,6 +581,7 @@ export default function Portfolio() {
           </div>
         </AnimatedSection>
 
+        
         {/* Stats Section - New */}
         <AnimatedSection
           id="stats"
@@ -565,9 +609,9 @@ export default function Portfolio() {
                 suffix="%"
               />
               <StatCard
-                icon={<Shield className="h-10 w-10 text-primary-light" />}
+                icon={<Wallet className="h-10 w-10 text-primary-light" />}
                 value={stats.policies}
-                label="Policies Issued"
+                label="Claims"
                 suffix="+"
               />
             </div>
@@ -660,11 +704,7 @@ export default function Portfolio() {
 
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-12">
-              <AnimatedElement animation="slide-in-left" delay={100}>
-                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                  My Expertise
-                </Badge>
-              </AnimatedElement>
+           
               <AnimatedElement animation="slide-in-right" delay={200}>
                 <h2 className="text-3xl font-bold text-white">How I Can Help You</h2>
               </AnimatedElement>
@@ -771,7 +811,7 @@ export default function Portfolio() {
               <PriorityCard icon={<Package className="h-12 w-12 text-white" strokeWidth={1.5} />} title="Others" />
             </StaggerContainer>
 
-            <AnimatedElement className="text-center mt-12" animation="fade-in" delay={800}>
+            <AnimatedElement className="text-center mt-12" animation="fade-in" delay={200}>
               <a
                 href="https://calendly.com/plukbluesapphire2025/booking-an-appointment"
                 target="_blank"
@@ -795,143 +835,151 @@ export default function Portfolio() {
           <div className="w-24 h-1 bg-primary-light rounded-full"></div>
         </div>
 
-        {/* Experience Section */}
-        <AnimatedSection
-          id="experience"
-          style={{ backgroundColor: "var(--muted)" }}
-          className="py-16 sm:py-24"
-          animation="fade-in"
-        >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <AnimatedElement animation="slide-in-left" delay={100}>
-                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
-                  Professional Experience
-                </Badge>
-              </AnimatedElement>
-              <AnimatedElement animation="slide-in-right" delay={200}>
-                <h2 className="text-3xl font-bold text-white">My Career Journey</h2>
-              </AnimatedElement>
-            </div>
+       {/* Experience Section */}
+          <AnimatedSection
+            id="experience"
+            style={{ backgroundColor: "var(--muted)" }}
+            className="py-16 sm:py-24"
+            animation="fade-in"
+          >
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <AnimatedElement animation="slide-in-left" delay={100}>
+                  <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white">
+                    Professional Experience
+                  </Badge>
+                </AnimatedElement>
+                <AnimatedElement animation="slide-in-right" delay={200}>
+                  <h2 className="text-3xl font-bold text-white">My Career Journey</h2>
+                </AnimatedElement>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <AnimatedElement animation="slide-in-left" delay={300} className="space-y-8">
-                <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-4">🌟 My Career Journey 🌟</h3>
-                    <div className="flex items-center justify-center mb-2">
-                      <div className="h-1 w-16 bg-primary-light rounded-full"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                {/* Left Column */}
+                <AnimatedElement animation="slide-in-left" delay={300} className="h-full">
+                  <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl h-full flex flex-col">
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-semibold text-white mb-2">🌟 Milestones</h3>
+                      <div className="flex items-center justify-center mb-2">
+                        <div className="h-1 w-16 bg-primary-light rounded-full"></div>
+                      </div>
+                      <p className="text-white">📅 Started: March 30, 2019</p>
+                      <p className="text-white">🚀 Promoted to Assistant Unit Manager: June 2019</p>
+                      <p className="text-white">👔 Full-Time Advisor: January 2, 2021</p>
                     </div>
-                    <p className="text-white mb-2">📅 Started: March 30, 2019</p>
-                    <p className="text-white mb-2">🚀 Promoted to Assistant Unit Manager: June 2019</p>
-                    <p className="text-white mb-2">👔 Became a Full-Time Financial Advisor: January 2, 2021</p>
-                  </div>
 
-                  <ExperienceItem
-                    title="2019 Achievements"
-                    company="PRU LIFE U.K."
-                    period="2019"
-                    description="Top Agent, Top Referrer, Rookie Fast Track Qualifier"
-                  />
-                  <ExperienceItem
-                    title="2020 Achievements"
-                    company="PRU LIFE U.K."
-                    period="2020"
-                    description="Breakthrough Boundaries Conference Delegate (Malaysia), Top Unit Agent (October), Top 3 Unit Agent (March), Top 2 Unit Agent (April)"
-                  />
-                </div>
-              </AnimatedElement>
-
-              <AnimatedElement animation="slide-in-right" delay={500} className="space-y-8">
-                <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl">
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold text-white mb-4">🏆 Achievements & Goals 🏆</h3>
-                    <div className="flex items-center justify-center mb-2">
-                      <div className="h-1 w-16 bg-primary-light rounded-full"></div>
+                    <div className="space-y-6">
+                      <ExperienceItem
+                        title="2019 Achievements"
+                        company="PRU LIFE U.K."
+                        period="2019"
+                        description="Top Agent, Top Referrer, Rookie Fast Track Qualifier"
+                      />
+                      <ExperienceItem
+                        title="2020 Achievements"
+                        company="PRU LIFE U.K."
+                        period="2020"
+                        description="BBCon Delegate (Malaysia), Top Unit Agent (October), Top 3 (March), Top 2 (April)"
+                      />
                     </div>
                   </div>
+                </AnimatedElement>
 
-                  <ExperienceItem
-                    title="2021 Achievements"
-                    company="PRU LIFE U.K."
-                    period="2021"
-                    description="Top 1 Unit Agent (January), Ace Builder (April), Top Agent (Unit Level, Jan-Aug), Life Club Qualifier Member, BBCon Delegate, National Achievers Club, Top 10K Active Agent Member"
-                  />
-                  <ExperienceItem
-                    title="2022 Achievements"
-                    company="PRU LIFE U.K."
-                    period="2022"
-                    description="Top Agent, Top Branch Business Builder, Sectoral Achiever"
-                  />
-                  <ExperienceItem
-                    title="2023 Achievements"
-                    company="PRU LIFE U.K."
-                    period="2023"
-                    description="Top Agent (Unit Level), Top 1 Business Builder (Branch Level YTD), National Achievers Club"
-                  />
-                  <ExperienceItem
-                    title="2024-2025 Goals"
-                    company="PRU LIFE U.K."
-                    period="2024-2025"
-                    description="Aspirant Unit Manager (Stepping up to lead and inspire a new generation of financial consultants!)"
-                  />
-                </div>
-              </AnimatedElement>
+                {/* Right Column */}
+                <AnimatedElement animation="slide-in-right" delay={500} className="h-full">
+                  <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl h-full flex flex-col">
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-semibold text-white mb-2">🏆 Achievements & Goals</h3>
+                      <div className="flex items-center justify-center mb-2">
+                        <div className="h-1 w-16 bg-primary-light rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <ExperienceItem
+                        title="2021 Achievements"
+                        company="PRU LIFE U.K."
+                        period="2021"
+                        description="Top 1 Unit Agent (Jan), Ace Builder (Apr), Life Club, BBCon, NAC, Top 10K Agent"
+                      />
+                      <ExperienceItem
+                        title="2022 Achievements"
+                        company="PRU LIFE U.K."
+                        period="2022"
+                        description="Top Agent, Top Branch Business Builder, Sectoral Achiever"
+                      />
+                      <ExperienceItem
+                        title="2023 Achievements"
+                        company="PRU LIFE U.K."
+                        period="2023"
+                        description="Top Agent, Top 1 Business Builder (YTD), National Achievers Club"
+                      />
+                      <ExperienceItem
+                        title="2024–2025 Goals"
+                        company="PRU LIFE U.K."
+                        period="2024–2025"
+                        description="Aspirant Unit Manager — stepping up to inspire new consultants!"
+                      />
+                    </div>
+                  </div>
+                </AnimatedElement>
+              </div>
             </div>
-          </div>
-        </AnimatedSection>
+          </AnimatedSection>
 
         {/* Divider */}
         <div className="h-16 bg-gradient-to-b from-muted/90 to-accent flex items-center justify-center">
           <div className="w-24 h-1 bg-primary-light rounded-full"></div>
         </div>
 
-        {/* Feedback Section - New */}
+      {/* Feedback Section - Enhanced */}
         <AnimatedSection
-          id="feedback"
-          ref={feedbackSectionRef}
-          className="py-16 sm:py-24 relative"
-          style={{ backgroundColor: "var(--secondary)" }}
-          animation="fade-in"
-        >
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <AnimatedElement animation="slide-in-left" delay={100}>
-                <Badge style={{ backgroundColor: "var(--primary)" }} className="mb-4 text-white px-6 py-2 text-base">
-                  Client Feedback
-                </Badge>  
-              </AnimatedElement>
-              <AnimatedElement animation="slide-in-right" delay={200}>
-                <h2 className="text-4xl font-bold text-white mt-4">What My Clients Say</h2>
-              </AnimatedElement>
-            </div>
+              id="feedback"
+              ref={feedbackSectionRef}
+              className="py-16 sm:py-24 relative"
+              style={{ backgroundColor: "var(--secondary)" }}
+              animation="fade-in"
+            >
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-12">
+                  <AnimatedElement animation="slide-in-left" delay={100}>
+                    <Badge
+                      style={{ backgroundColor: "var(--primary)" }}
+                      className="mb-4 text-white px-6 py-2 text-base"
+                    >
+                      Client Feedback
+                    </Badge>
+                  </AnimatedElement>
+                  <AnimatedElement animation="slide-in-right" delay={200}>
+                    <h2 className="text-4xl font-bold text-white mt-4">What My Clients Say</h2>
+                  </AnimatedElement>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <TestimonialCard
-                quote="Rona helped me secure my family's future with a comprehensive life insurance plan. Her expertise and dedication are unmatched!"
-                name="Maria Santos"
-                title="Business Owner"
-                rating={5}
-              />
-              <TestimonialCard
-                quote="I was overwhelmed by insurance options until I met Rona. She simplified everything and found the perfect plan for my retirement needs."
-                name="Juan Dela Cruz"
-                title="School Teacher"
-                rating={5}
-              />
-              <TestimonialCard
-                quote="Professional, knowledgeable, and genuinely cares about her clients. Rona has been managing my family's insurance needs for years."
-                name="Anna Reyes"
-                title="Healthcare Professional"
-                rating={5}
-              />
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                  {/* Left Side - Feedback Form */}
+                  <div className="p-8 rounded-2xl shadow-lg bg-white/10 backdrop-blur-md">
+                    <h3 className="text-2xl font-semibold mb-6 text-white">Share Your Experience</h3>
+                    <FeedbackForm />
+                  </div>
 
-            <div className="mt-16">
-              <FeedbackForm />
-            </div>
-          </div>
-        </AnimatedSection>
+                  {/* Right Side - Testimonials Scrollable */}
+                  <div className="h-[710px] overflow-y-auto pr-4">
+                    <div className="flex flex-col gap-6">
+                      {testimonials.map((testimonial, index) => (
+                        <TestimonialCard
+                          key={index}
+                          quote={testimonial.feedback}
+                          name={testimonial.name}
+                          title={testimonial.title}
+                          rating={testimonial.rating}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+
 
         {/* Divider */}
         <div className="h-16 bg-gradient-to-b from-accent to-accent/90 flex items-center justify-center">
@@ -1075,85 +1123,14 @@ export default function Portfolio() {
               <AnimatedElement animation="slide-in-right" delay={500}>
                 <div className="bg-white rounded-xl shadow-xl p-8">
                   <h3 className="text-xl font-semibold text-gray-800 mb-6">Schedule a Free Consultation</h3>
-                  <form className="space-y-5">
-                    <div className="space-y-2">
-                      <label htmlFor="name" className="text-sm font-medium leading-none text-gray-800">
-                        Full Name
-                      </label>
-                      <input
-                        id="name"
-                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium leading-none text-gray-800">
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          type="email"
-                          className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                          placeholder="Your email"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="phone" className="text-sm font-medium leading-none text-gray-800">
-                          Phone
-                        </label>
-                        <input
-                          id="phone"
-                          type="tel"
-                          className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                          placeholder="Your phone number"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="service" className="text-sm font-medium leading-none text-gray-800">
-                        Service Interested In
-                      </label>
-                      <select
-                        id="service"
-                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                      >
-                        <option value="">Select a service</option>
-                        <option value="life">Life Insurance</option>
-                        <option value="parttime">Part-Time Job</option>
-                        
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="date" className="text-sm font-medium leading-none text-gray-800">
-                        Preferred Date
-                      </label>
-                      <input
-                        id="date"
-                        type="date"
-                        className="flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-medium leading-none text-gray-800">
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        className="flex min-h-[120px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder="Tell us about your insurance needs"
-                      />
-                    </div>
-                    <Button
-                      style={{ backgroundColor: "var(--primary)" }}
-                      className="w-full text-white hover:shadow-lg transition-all duration-300"
-                    >
-                      Schedule Consultation
-                    </Button>
-                    <p className="text-xs text-gray-500 text-center mt-4">
-                      Your information is secure and will never be shared with third parties.
-                    </p>
-                  </form>
+                  <CalendlyWidget
+                    url="https://calendly.com/plukbluesapphire2025/booking-an-appointment"
+                    height="650px"
+                    className="rounded-lg"
+                  />
+                  <p className="text-xs text-gray-500 text-center mt-4">
+                    Your information is secure and will never be shared with third parties.
+                  </p>
                 </div>
               </AnimatedElement>
             </div>

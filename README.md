@@ -34,3 +34,39 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# Feedback Form with Resend Email
+
+This project implements a feedback form that sends submissions via email using Resend.
+
+## Current Setup
+
+The current implementation is configured for testing:
+
+- Uses Resend's default domain (`onboarding@resend.dev`) as the sender
+- Sends all emails to the verified testing account (`aduknowssss@gmail.com`)
+- Includes notices in the emails indicating the intended recipients
+
+## Moving to Production
+
+To move to production and send emails to actual recipients:
+
+1. **Verify a domain with Resend**:
+
+   - Go to [resend.com/domains](https://resend.com/domains)
+   - Add and verify your domain
+   - Follow Resend's instructions for adding DNS records
+
+2. **Update the API route**:
+   - Open `app/api/feedback/route.ts`
+   - Change `FROM_EMAIL` to use your verified domain
+   - Change `ADMIN_EMAIL` to the actual recipient (`plukbluesapphire2025@gmail.com`)
+   - Update the confirmation email to send to the actual user's email
+   - Remove the testing notices and `[TEST]` prefixes
+
+## Environment Variables
+
+- `RESEND_API_KEY`: Your Resend API key (required)
+  \`\`\`
+
+Let's also clean up the API route to make it more concise:
